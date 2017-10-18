@@ -4,7 +4,6 @@ defmodule MMDB2Decoder.TestHelpers.Fixture do
   alias MMDB2Decoder.TestHelpers.FixtureDownload
   alias MMDB2Decoder.TestHelpers.FixtureList
 
-
   @doc """
   Returns the binary contens of a fixture file.
   """
@@ -13,6 +12,6 @@ defmodule MMDB2Decoder.TestHelpers.Fixture do
     fixture
     |> FixtureList.fixture_name()
     |> FixtureDownload.local()
-    |> File.read!
+    |> File.read!()
   end
 end
