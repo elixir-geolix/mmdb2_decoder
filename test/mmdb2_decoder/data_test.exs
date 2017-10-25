@@ -5,12 +5,11 @@ defmodule MMDB2Decoder.DataTest do
   alias MMDB2Decoder.TestHelpers.Fixture
 
   test "decoded values" do
-    {meta, tree, data} =
+    decoded =
       :fixture_decoder
       |> Fixture.contents()
       |> MMDB2Decoder.parse_database()
-
-    decoded = MMDB2Decoder.lookup({1, 1, 1, 0}, meta, tree, data)
+      |> MMDB2Decoder.pipe_lookup({1, 1, 1, 0})
 
     assert decoded[:utf8_string] == "unicode! ☯ - ♫"
     assert decoded[:double] == 42.123456

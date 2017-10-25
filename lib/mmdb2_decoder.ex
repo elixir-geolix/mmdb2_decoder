@@ -31,6 +31,12 @@ defmodule MMDB2Decoder do
     |> split_data()
   end
 
+  @doc """
+  Utility method to pipe `parse_database/1` directly to `lookup/4`.
+  """
+  @spec pipe_lookup({Metadata.t(), binary, binary}, tuple) :: map | nil
+  def pipe_lookup({meta, tree, data}, ip), do: lookup(ip, meta, tree, data)
+
   defp lookup_pointer(0, _, _), do: nil
 
   defp lookup_pointer(ptr, data, node_count) do
