@@ -12,6 +12,7 @@ defmodule MMDB2Decoder do
   @doc """
   Looks up the data associated with an IP tuple.
   """
+  @spec lookup(tuple, Metadata.t(), binary, binary) :: map | nil
   def lookup(ip, meta, tree, data) do
     ip
     |> LookupTree.locate(meta, tree)
@@ -22,7 +23,7 @@ defmodule MMDB2Decoder do
   Parses a database binary and splits it into metadata, lookup tree and data.
   """
   @spec parse_database(binary) ::
-          {binary, binary, Metadata.t()}
+          {Metadata.t(), binary, binary}
           | {:error, term}
   def parse_database(contents) do
     contents
