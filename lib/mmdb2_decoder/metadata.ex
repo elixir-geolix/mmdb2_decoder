@@ -10,7 +10,7 @@ defmodule MMDB2Decoder.Metadata do
           database_type: String.t(),
           description: map,
           ip_version: integer,
-          languages: List.t(),
+          languages: list,
           node_byte_size: integer,
           node_count: integer,
           record_size: integer,
