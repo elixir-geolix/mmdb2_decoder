@@ -3,7 +3,6 @@ defmodule MMDB2Decoder do
   MMDB2 file format decoder.
   """
 
-  alias MMDB2Decoder.Data
   alias MMDB2Decoder.Database
   alias MMDB2Decoder.LookupTree
   alias MMDB2Decoder.Metadata
@@ -17,7 +16,7 @@ defmodule MMDB2Decoder do
   def lookup(ip, meta, tree, data) do
     ip
     |> LookupTree.locate(meta, tree)
-    |> lookup_pointer(data, meta.node_count)
+    |> Database.lookup_pointer(data, meta)
   end
 
   @doc """
@@ -38,15 +37,4 @@ defmodule MMDB2Decoder do
   """
   @spec pipe_lookup({Metadata.t(), binary, binary}, tuple) :: map | nil
   def pipe_lookup({meta, tree, data}, ip), do: lookup(ip, meta, tree, data)
-
-  defp lookup_pointer(0, _, _), do: nil
-
-  defp lookup_pointer(ptr, data, node_count) do
-    offset = ptr - node_count - 16
-
-    case Data.value(data, offset) do
-      result when is_map(result) -> result
-      _ -> nil
-    end
-  end
 end

@@ -7,6 +7,21 @@ defmodule MMDB2Decoder.Database do
   alias MMDB2Decoder.Metadata
 
   @doc """
+  Looks up a pointer in a database.
+  """
+  @spec lookup_pointer(non_neg_integer, binary, Metadata.t()) :: map | nil
+  def lookup_pointer(0, _, _), do: nil
+
+  def lookup_pointer(ptr, data, meta) do
+    offset = ptr - meta.node_count - 16
+
+    case Data.value(data, offset) do
+      result when is_map(result) -> result
+      _ -> nil
+    end
+  end
+
+  @doc """
   Splits the data part according to a metadata definition.
   """
   @spec split_data(binary, binary) :: {Metadata.t(), binary, binary}
