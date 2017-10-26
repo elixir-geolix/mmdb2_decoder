@@ -4,6 +4,7 @@ defmodule MMDB2Decoder do
   """
 
   alias MMDB2Decoder.Data
+  alias MMDB2Decoder.Database
   alias MMDB2Decoder.LookupTree
   alias MMDB2Decoder.Metadata
 
@@ -26,9 +27,10 @@ defmodule MMDB2Decoder do
           {Metadata.t(), binary, binary}
           | {:error, term}
   def parse_database(contents) do
-    contents
-    |> :binary.split(@metadata_marker)
-    |> split_data()
+    case :binary.split(contents, @metadata_marker) do
+      [_] -> {:error, :no_metadata}
+      [data, meta] -> Database.split_data(meta, data)
+    end
   end
 
   @doc """
@@ -46,25 +48,5 @@ defmodule MMDB2Decoder do
       result when is_map(result) -> result
       _ -> nil
     end
-  end
-
-  defp split_data([_]), do: {:error, :no_metadata}
-
-  defp split_data([data, meta]) do
-    meta = Data.value(meta, 0)
-    meta = struct(%Metadata{}, meta)
-    record_size = Map.get(meta, :record_size)
-    node_count = Map.get(meta, :node_count)
-    node_byte_size = div(record_size, 4)
-    tree_size = node_count * node_byte_size
-
-    meta = %{meta | node_byte_size: node_byte_size}
-    meta = %{meta | tree_size: tree_size}
-
-    tree = data |> binary_part(0, tree_size)
-    data_size = byte_size(data) - byte_size(tree) - 16
-    data = data |> binary_part(tree_size + 16, data_size)
-
-    {meta, tree, data}
   end
 end
