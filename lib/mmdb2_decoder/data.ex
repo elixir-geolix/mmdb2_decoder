@@ -5,24 +5,25 @@ defmodule MMDB2Decoder.Data do
 
   @type decoded :: atom | binary | boolean | list | map
 
+  # standard data types
+  @binary 2
+  @bytes 4
+  @double 3
+  @extended 0
+  @map 7
+  @unsigned_16 5
+  @unsigned_32 6
+  @pointer 1
 
-  @array         4 # extended: 11
-  @bool          7 # extended: 14
-  @binary        2
-  @bytes         4
-  @cache         5 # extended: 12
-  @double        3
-  @end_marker    6 # extended: 13
-  @extended      0
-  @float         8 # extended: 15
-  @map           7
-  @signed_32     1 # extended:  8
-  @unsigned_16   5
-  @unsigned_32   6
-  @unsigned_64   2 # extended:  9
-  @unsigned_128  3 # extended: 10
-  @pointer       1
-
+  # extended data types
+  @extended_array 4
+  @extended_bool 7
+  @extended_cache 5
+  @extended_end_marker 6
+  @extended_float 8
+  @extended_signed_32 1
+  @extended_unsigned_64 2
+  @extended_unsigned_128 3
 
   @doc """
   Decodes the datatype found at the given offset of the data.
@@ -40,41 +41,41 @@ defmodule MMDB2Decoder.Data do
     {Float.round(value, 8), data_part}
   end
 
-  def decode(data, <<@extended::size(3), len::size(5), @array, data_part::binary>>) do
+  def decode(data, <<@extended::size(3), len::size(5), @extended_array, data_part::binary>>) do
     decode_array(len, data, data_part)
   end
 
-  def decode(_, <<@extended::size(3), value::size(5), @bool, data_part::binary>>) do
+  def decode(_, <<@extended::size(3), value::size(5), @extended_bool, data_part::binary>>) do
     {1 == value, data_part}
   end
 
-  def decode(_, <<@extended::size(3), _::size(5), @cache, data_part::binary>>) do
+  def decode(_, <<@extended::size(3), _::size(5), @extended_cache, data_part::binary>>) do
     {:cache, data_part}
   end
 
-  def decode(_, <<@extended::size(3), 0::size(5), @end_marker, data_part::binary>>) do
+  def decode(_, <<@extended::size(3), 0::size(5), @extended_end_marker, data_part::binary>>) do
     {:end, data_part}
   end
 
   def decode(_, <<
         @extended::size(3),
         4::size(5),
-        @float,
+        @extended_float,
         value::size(32)-float,
         data_part::binary
       >>) do
     {Float.round(value, 4), data_part}
   end
 
-  def decode(_, <<@extended::size(3), len::size(5), @signed_32, data_part::binary>>) do
+  def decode(_, <<@extended::size(3), len::size(5), @extended_signed_32, data_part::binary>>) do
     decode_signed(len, data_part)
   end
 
-  def decode(_, <<@extended::size(3), len::size(5), @unsigned_64, data_part::binary>>) do
+  def decode(_, <<@extended::size(3), len::size(5), @extended_unsigned_64, data_part::binary>>) do
     decode_unsigned(len, data_part)
   end
 
-  def decode(_, <<@extended::size(3), len::size(5), @unsigned_128, data_part::binary>>) do
+  def decode(_, <<@extended::size(3), len::size(5), @extended_unsigned_128, data_part::binary>>) do
     decode_unsigned(len, data_part)
   end
 
