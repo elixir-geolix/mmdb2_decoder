@@ -1,5 +1,24 @@
 # MMDB2 File Format Decoder
 
+## Setup
+
+Add the module as a dependency to your `mix.exs` file:
+
+```elixir
+defp deps do
+  [{ :mmdb2_decoder, "~> 0.1.0" }]
+end
+```
+
+Depending on your elixir version you should also update your applications to
+include all necessary projects:
+
+```elixir
+def application do
+  [applications: [:mmdb2_decoder]]
+end
+```
+
 ## License
 
 [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
