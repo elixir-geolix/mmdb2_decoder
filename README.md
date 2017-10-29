@@ -19,6 +19,17 @@ def application do
 end
 ```
 
+## Usage
+
+```elixir
+database = File.read!("/path/to/database.mmdb")
+{meta, tree, data} = MMDB2Decoder.parse_database(database)
+
+{:ok, ip} = :inet.parse_address(String.to_charlist("8.8.8.8"))
+
+MMDB2Decoder.lookup(ip, meta, tree, data)
+```
+
 ## License
 
 [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
