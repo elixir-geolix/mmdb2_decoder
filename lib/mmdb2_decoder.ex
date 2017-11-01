@@ -12,7 +12,7 @@ defmodule MMDB2Decoder do
   @doc """
   Looks up the data associated with an IP tuple.
   """
-  @spec lookup(tuple, Metadata.t(), binary, binary) :: map | nil
+  @spec lookup(:inet.ip_address(), Metadata.t(), binary, binary) :: map | nil
   def lookup(ip, meta, tree, data) do
     ip
     |> LookupTree.locate(meta, tree)
@@ -35,6 +35,6 @@ defmodule MMDB2Decoder do
   @doc """
   Utility method to pipe `parse_database/1` directly to `lookup/4`.
   """
-  @spec pipe_lookup({Metadata.t(), binary, binary}, tuple) :: map | nil
+  @spec pipe_lookup({Metadata.t(), binary, binary}, :inet.ip_address()) :: map | nil
   def pipe_lookup({meta, tree, data}, ip), do: lookup(ip, meta, tree, data)
 end
