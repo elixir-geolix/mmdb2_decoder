@@ -5,7 +5,7 @@ defmodule MMDB2Decoder.TestHelpers.Fixture do
   alias MMDB2Decoder.TestHelpers.FixtureList
 
   @doc """
-  Returns the binary contens of a fixture file.
+  Returns the binary contents of a fixture file.
   """
   @spec contents(atom) :: binary
   def contents(fixture) do
