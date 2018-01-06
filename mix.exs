@@ -10,15 +10,15 @@ defmodule MMDB2Decoder.Mixfile do
       version: "0.2.0-dev",
       elixir: "~> 1.3",
       deps: deps(),
+      description: "MMDB2 File Format Decoder",
+      docs: docs(),
       elixirc_paths: elixirc_paths(Mix.env()),
+      package: package(),
       preferred_cli_env: [
         coveralls: :test,
         "coveralls.detail": :test,
         "coveralls.travis": :test
       ],
-      description: "MMDB2 File Format Decoder",
-      docs: docs(),
-      package: package(),
       test_coverage: [tool: ExCoveralls]
     ]
   end
