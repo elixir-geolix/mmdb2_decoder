@@ -25,12 +25,19 @@ end
 ## Usage
 
 ```elixir
+# "regular" flow
 database = File.read!("/path/to/database.mmdb")
 {meta, tree, data} = MMDB2Decoder.parse_database(database)
 
 {:ok, ip} = :inet.parse_address(String.to_charlist("8.8.8.8"))
 
 MMDB2Decoder.lookup(ip, meta, tree, data)
+
+# "piping" flow
+"/path/to/database.mmdb"
+|> File.read!()
+|> MMDB2Decoder.parse_database()
+|> MMDB2Decoder.pipe_lookup({8, 8, 8, 8})
 ```
 
 ## License
