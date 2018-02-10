@@ -29,70 +29,73 @@ defmodule MMDB2Decoder.Data do
   Decodes the datatype found at the given offset of the data.
   """
   @spec decode(binary, binary) :: {decoded, binary}
-  def decode(_, <<@binary::size(3), len::size(5), data_part::binary>>) do
-    decode_binary(len, data_part)
+  def decode(<<@binary::size(3), len::size(5), part_rest::binary>>, _) do
+    decode_binary(part_rest, len)
   end
 
-  def decode(_, <<@bytes::size(3), len::size(5), data_part::binary>>) do
-    decode_binary(len, data_part)
+  def decode(<<@bytes::size(3), len::size(5), part_rest::binary>>, _) do
+    decode_binary(part_rest, len)
   end
 
-  def decode(_, <<@double::size(3), 8::size(5), value::size(64)-float, data_part::binary>>) do
-    {Float.round(value, 8), data_part}
+  def decode(<<@double::size(3), 8::size(5), value::size(64)-float, part_rest::binary>>, _) do
+    {Float.round(value, 8), part_rest}
   end
 
-  def decode(data, <<@extended::size(3), len::size(5), @extended_array, data_part::binary>>) do
-    decode_array(len, data, data_part)
+  def decode(<<@extended::size(3), len::size(5), @extended_array, part_rest::binary>>, data_full) do
+    decode_array(part_rest, data_full, len)
   end
 
-  def decode(_, <<@extended::size(3), value::size(5), @extended_bool, data_part::binary>>) do
-    {1 == value, data_part}
+  def decode(<<@extended::size(3), value::size(5), @extended_bool, part_rest::binary>>, _) do
+    {1 == value, part_rest}
   end
 
-  def decode(_, <<@extended::size(3), _::size(5), @extended_cache, data_part::binary>>) do
-    {:cache, data_part}
+  def decode(<<@extended::size(3), _::size(5), @extended_cache, part_rest::binary>>, _) do
+    {:cache, part_rest}
   end
 
-  def decode(_, <<@extended::size(3), 0::size(5), @extended_end_marker, data_part::binary>>) do
-    {:end, data_part}
+  def decode(<<@extended::size(3), 0::size(5), @extended_end_marker, part_rest::binary>>, _) do
+    {:end, part_rest}
   end
 
-  def decode(_, <<
-        @extended::size(3),
-        4::size(5),
-        @extended_float,
-        value::size(32)-float,
-        data_part::binary
-      >>) do
-    {Float.round(value, 4), data_part}
+  def decode(
+        <<
+          @extended::size(3),
+          4::size(5),
+          @extended_float,
+          value::size(32)-float,
+          part_rest::binary
+        >>,
+        _
+      ) do
+    {Float.round(value, 4), part_rest}
   end
 
-  def decode(_, <<@extended::size(3), len::size(5), @extended_signed_32, data_part::binary>>) do
-    decode_signed(len, data_part)
+  def decode(<<@extended::size(3), len::size(5), @extended_signed_32, part_rest::binary>>, _) do
+    decode_signed(part_rest, len)
   end
 
-  def decode(_, <<@extended::size(3), len::size(5), @extended_unsigned_64, data_part::binary>>) do
-    decode_unsigned(len, data_part)
+  def decode(<<@extended::size(3), len::size(5), @extended_unsigned_64, part_rest::binary>>, _) do
+    decode_unsigned(part_rest, len)
   end
 
-  def decode(_, <<@extended::size(3), len::size(5), @extended_unsigned_128, data_part::binary>>) do
-    decode_unsigned(len, data_part)
+  def decode(<<@extended::size(3), len::size(5), @extended_unsigned_128, part_rest::binary>>, _) do
+    decode_unsigned(part_rest, len)
   end
 
-  def decode(data, <<@map::size(3), len::size(5), data_part::binary>>) do
-    decode_map(len, data, data_part)
+  def decode(<<@map::size(3), len::size(5), part_rest::binary>>, data_full) do
+    decode_map(part_rest, data_full, len)
   end
 
-  def decode(data, <<@pointer::size(3), len::size(2), data_part::bitstring>>) do
-    decode_pointer(len, data, data_part)
+  def decode(<<@pointer::size(3), len::size(2), part_rest::bitstring>>, data_full) do
+    decode_pointer(part_rest, data_full, len)
   end
 
-  def decode(_, <<@unsigned_16::size(3), len::size(5), data_part::binary>>) do
-    decode_unsigned(len, data_part)
+  def decode(<<@unsigned_16::size(3), len::size(5), part_rest::binary>>, _) do
+    decode_unsigned(part_rest, len)
   end
 
-  def decode(_, <<@unsigned_32::size(3), len::size(5), data_part::binary>>) do
-    decode_unsigned(len, data_part)
+  def decode(<<@unsigned_32::size(3), len::size(5), part_rest::binary>>, _) do
+    decode_unsigned(part_rest, len)
   end
 
   @doc """
@@ -102,7 +105,7 @@ defmodule MMDB2Decoder.Data do
   def value(data, offset) when byte_size(data) > offset do
     <<_::size(offset)-binary, rest::binary>> = data
 
-    {value, _rest} = decode(data, rest)
+    {value, _rest} = decode(rest, data)
 
     value
   end
@@ -111,74 +114,74 @@ defmodule MMDB2Decoder.Data do
 
   # value decoding
 
-  defp decode_array(len, data, data_part) do
-    {size, data_part} = payload_len(len, data_part)
+  defp decode_array(data_part, data_full, len) do
+    {data_part, size} = payload_len(data_part, len)
 
-    decode_array_rec(size, data, data_part, [])
+    decode_array_rec(data_part, data_full, size, [])
   end
 
-  defp decode_array_rec(0, _, data_part, acc) do
+  defp decode_array_rec(data_part, _, 0, acc) do
     {Enum.reverse(acc), data_part}
   end
 
-  defp decode_array_rec(size, data, data_part, acc) do
-    {value, rest} = decode(data, data_part)
+  defp decode_array_rec(data_part, data_full, size, acc) do
+    {value, rest} = decode(data_part, data_full)
 
-    decode_array_rec(size - 1, data, rest, [value | acc])
+    decode_array_rec(rest, data_full, size - 1, [value | acc])
   end
 
-  defp decode_binary(len, data_part) do
-    {len, data_part} = payload_len(len, data_part)
+  defp decode_binary(data_part, len) do
+    {data_part, len} = payload_len(data_part, len)
 
     <<value::size(len)-binary, rest::binary>> = data_part
 
     {value, rest}
   end
 
-  defp decode_map(len, data, data_part) do
-    {size, data_part} = payload_len(len, data_part)
+  defp decode_map(data_part, data_full, len) do
+    {data_part, size} = payload_len(data_part, len)
 
-    decode_map_rec(size, data, data_part, %{})
+    decode_map_rec(data_part, data_full, size, %{})
   end
 
-  defp decode_map_rec(0, _, data_part, acc) do
+  defp decode_map_rec(data_part, _, 0, acc) do
     {acc, data_part}
   end
 
-  defp decode_map_rec(size, data, data_part, acc) do
-    {key, rest} = decode(data, data_part)
-    {value, rest} = decode(data, rest)
+  defp decode_map_rec(data_part, data_full, size, acc) do
+    {key, part_rest} = decode(data_part, data_full)
+    {value, dec_rest} = decode(part_rest, data_full)
 
     acc = Map.put(acc, String.to_atom(key), value)
 
-    decode_map_rec(size - 1, data, rest, acc)
+    decode_map_rec(dec_rest, data_full, size - 1, acc)
   end
 
-  defp decode_pointer(0, data, data_part) do
+  defp decode_pointer(data_part, data_full, 0) do
     <<offset::size(11), rest::binary>> = data_part
 
-    {value(data, offset), rest}
+    {value(data_full, offset), rest}
   end
 
-  defp decode_pointer(1, data, data_part) do
+  defp decode_pointer(data_part, data_full, 1) do
     <<offset::size(19), rest::binary>> = data_part
 
-    {value(data, offset + 2048), rest}
+    {value(data_full, offset + 2048), rest}
   end
 
-  defp decode_pointer(2, data, data_part) do
+  defp decode_pointer(data_part, data_full, 2) do
     <<offset::size(27), rest::binary>> = data_part
 
-    {value(data, offset + 526_336), rest}
+    {value(data_full, offset + 526_336), rest}
   end
 
-  defp decode_pointer(3, data, data_part) do
+  defp decode_pointer(data_part, data_full, 3) do
     <<_::size(3), offset::size(32), rest::binary>> = data_part
 
-    {value(data, offset), rest}
+    {value(data_full, offset), rest}
   end
 
-  defp decode_signed(len, data_part) do
+  defp decode_signed(data_part, len) do
     bitlen = len * 8
 
     <<value::size(bitlen)-integer-signed, rest::binary>> = data_part
@@ -186,7 +189,7 @@ defmodule MMDB2Decoder.Data do
     {value, rest}
   end
 
-  defp decode_unsigned(len, data_part) do
+  defp decode_unsigned(data_part, len) do
     bitlen = len * 8
 
     <<value::size(bitlen)-integer-unsigned, rest::binary>> = data_part
@@ -196,17 +199,17 @@ defmodule MMDB2Decoder.Data do
 
   # payload detection
 
-  defp payload_len(29, <<len::size(8), data::binary>>) do
-    {29 + len, data}
+  defp payload_len(<<len::size(8), data::binary>>, 29) do
+    {data, 29 + len}
   end
 
-  defp payload_len(30, <<len::size(16), data::binary>>) do
-    {285 + len, data}
+  defp payload_len(<<len::size(16), data::binary>>, 30) do
+    {data, 285 + len}
   end
 
-  defp payload_len(31, <<len::size(24), data::binary>>) do
-    {65821 + len, data}
+  defp payload_len(<<len::size(24), data::binary>>, 31) do
+    {data, 65821 + len}
   end
 
-  defp payload_len(len, data), do: {len, data}
+  defp payload_len(data, len), do: {data, len}
 end
