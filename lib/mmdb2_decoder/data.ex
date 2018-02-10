@@ -71,15 +71,15 @@ defmodule MMDB2Decoder.Data do
   end
 
   def decode(<<@extended::size(3), len::size(5), @extended_signed_32, part_rest::binary>>, _) do
-    decode_signed(part_rest, len)
+    decode_signed(part_rest, len * 8)
   end
 
   def decode(<<@extended::size(3), len::size(5), @extended_unsigned_64, part_rest::binary>>, _) do
-    decode_unsigned(part_rest, len)
+    decode_unsigned(part_rest, len * 8)
   end
 
   def decode(<<@extended::size(3), len::size(5), @extended_unsigned_128, part_rest::binary>>, _) do
-    decode_unsigned(part_rest, len)
+    decode_unsigned(part_rest, len * 8)
   end
 
   def decode(<<@map::size(3), len::size(5), part_rest::binary>>, data_full) do
@@ -91,11 +91,11 @@ defmodule MMDB2Decoder.Data do
   end
 
   def decode(<<@unsigned_16::size(3), len::size(5), part_rest::binary>>, _) do
-    decode_unsigned(part_rest, len)
+    decode_unsigned(part_rest, len * 8)
   end
 
   def decode(<<@unsigned_32::size(3), len::size(5), part_rest::binary>>, _) do
-    decode_unsigned(part_rest, len)
+    decode_unsigned(part_rest, len * 8)
   end
 
   @doc """
@@ -181,17 +181,13 @@ defmodule MMDB2Decoder.Data do
     {value(data_full, offset), rest}
   end
 
-  defp decode_signed(data_part, len) do
-    bitlen = len * 8
-
+  defp decode_signed(data_part, bitlen) do
     <<value::size(bitlen)-integer-signed, rest::binary>> = data_part
 
     {value, rest}
   end
 
-  defp decode_unsigned(data_part, len) do
-    bitlen = len * 8
-
+  defp decode_unsigned(data_part, bitlen) do
     <<value::size(bitlen)-integer-unsigned, rest::binary>> = data_part
 
     {value, rest}
