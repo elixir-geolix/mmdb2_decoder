@@ -86,8 +86,20 @@ defmodule MMDB2Decoder.Data do
     decode_map(part_rest, data_full, len)
   end
 
-  def decode(<<@pointer::size(3), len::size(2), part_rest::bitstring>>, data_full) do
-    decode_pointer(part_rest, data_full, len)
+  def decode(<<@pointer::size(3), 0::size(2), offset::size(11), part_rest::bitstring>>, data_full) do
+    {value(data_full, offset), part_rest}
+  end
+
+  def decode(<<@pointer::size(3), 1::size(2), offset::size(19), part_rest::bitstring>>, data_full) do
+    {value(data_full, 2048 + offset), part_rest}
+  end
+
+  def decode(<<@pointer::size(3), 2::size(2), offset::size(27), part_rest::bitstring>>, data_full) do
+    {value(data_full, 526_336 + offset), part_rest}
+  end
+
+  def decode(<<@pointer::size(3), 3::size(2), offset::size(32), part_rest::bitstring>>, data_full) do
+    {value(data_full, offset), part_rest}
   end
 
   def decode(<<@unsigned_16::size(3), len::size(5), part_rest::binary>>, _) do
@@ -155,22 +167,6 @@ defmodule MMDB2Decoder.Data do
     acc = Map.put(acc, String.to_atom(key), value)
 
     decode_map_rec(dec_rest, data_full, size - 1, acc)
-  end
-
-  defp decode_pointer(<<offset::size(11), rest::binary>>, data_full, 0) do
-    {value(data_full, offset), rest}
-  end
-
-  defp decode_pointer(<<offset::size(19), rest::binary>>, data_full, 1) do
-    {value(data_full, offset + 2048), rest}
-  end
-
-  defp decode_pointer(<<offset::size(27), rest::binary>>, data_full, 2) do
-    {value(data_full, offset + 526_336), rest}
-  end
-
-  defp decode_pointer(<<_::size(3), offset::size(32), rest::binary>>, data_full, 3) do
-    {value(data_full, offset), rest}
   end
 
   defp decode_signed(data_part, bitlen) do
