@@ -157,27 +157,19 @@ defmodule MMDB2Decoder.Data do
     decode_map_rec(dec_rest, data_full, size - 1, acc)
   end
 
-  defp decode_pointer(data_part, data_full, 0) do
-    <<offset::size(11), rest::binary>> = data_part
-
+  defp decode_pointer(<<offset::size(11), rest::binary>>, data_full, 0) do
     {value(data_full, offset), rest}
   end
 
-  defp decode_pointer(data_part, data_full, 1) do
-    <<offset::size(19), rest::binary>> = data_part
-
+  defp decode_pointer(<<offset::size(19), rest::binary>>, data_full, 1) do
     {value(data_full, offset + 2048), rest}
   end
 
-  defp decode_pointer(data_part, data_full, 2) do
-    <<offset::size(27), rest::binary>> = data_part
-
+  defp decode_pointer(<<offset::size(27), rest::binary>>, data_full, 2) do
     {value(data_full, offset + 526_336), rest}
   end
 
-  defp decode_pointer(data_part, data_full, 3) do
-    <<_::size(3), offset::size(32), rest::binary>> = data_part
-
+  defp decode_pointer(<<_::size(3), offset::size(32), rest::binary>>, data_full, 3) do
     {value(data_full, offset), rest}
   end
 
