@@ -29,8 +29,32 @@ defmodule MMDB2Decoder.Data do
   Decodes the datatype found at the given offset of the data.
   """
   @spec decode(binary, binary) :: {decoded, binary}
+  def decode(<<@binary::size(3), 29::size(5), len::size(8), part_rest::binary>>, _) do
+    decode_binary(part_rest, 29 + len)
+  end
+
+  def decode(<<@binary::size(3), 30::size(5), len::size(16), part_rest::binary>>, _) do
+    decode_binary(part_rest, 285 + len)
+  end
+
+  def decode(<<@binary::size(3), 31::size(5), len::size(24), part_rest::binary>>, _) do
+    decode_binary(part_rest, 65821 + len)
+  end
+
   def decode(<<@binary::size(3), len::size(5), part_rest::binary>>, _) do
     decode_binary(part_rest, len)
+  end
+
+  def decode(<<@bytes::size(3), 29::size(5), len::size(8), part_rest::binary>>, _) do
+    decode_binary(part_rest, 29 + len)
+  end
+
+  def decode(<<@bytes::size(3), 30::size(5), len::size(16), part_rest::binary>>, _) do
+    decode_binary(part_rest, 285 + len)
+  end
+
+  def decode(<<@bytes::size(3), 31::size(5), len::size(24), part_rest::binary>>, _) do
+    decode_binary(part_rest, 65821 + len)
   end
 
   def decode(<<@bytes::size(3), len::size(5), part_rest::binary>>, _) do
@@ -39,6 +63,27 @@ defmodule MMDB2Decoder.Data do
 
   def decode(<<@double::size(3), 8::size(5), value::size(64)-float, part_rest::binary>>, _) do
     {Float.round(value, 8), part_rest}
+  end
+
+  def decode(
+        <<@extended::size(3), 29::size(5), len::size(8), @extended_array, part_rest::binary>>,
+        data_full
+      ) do
+    decode_array(part_rest, data_full, 28 + len)
+  end
+
+  def decode(
+        <<@extended::size(3), 30::size(5), len::size(16), @extended_array, part_rest::binary>>,
+        data_full
+      ) do
+    decode_array(part_rest, data_full, 285 + len)
+  end
+
+  def decode(
+        <<@extended::size(3), 31::size(5), len::size(24), @extended_array, part_rest::binary>>,
+        data_full
+      ) do
+    decode_array(part_rest, data_full, 65821 + len)
   end
 
   def decode(<<@extended::size(3), len::size(5), @extended_array, part_rest::binary>>, data_full) do
@@ -80,6 +125,18 @@ defmodule MMDB2Decoder.Data do
 
   def decode(<<@extended::size(3), len::size(5), @extended_unsigned_128, part_rest::binary>>, _) do
     decode_unsigned(part_rest, len * 8)
+  end
+
+  def decode(<<@map::size(3), 29::size(5), len::size(8), part_rest::binary>>, data_full) do
+    decode_map(part_rest, data_full, 28 + len)
+  end
+
+  def decode(<<@map::size(3), 30::size(5), len::size(16), part_rest::binary>>, data_full) do
+    decode_map(part_rest, data_full, 285 + len)
+  end
+
+  def decode(<<@map::size(3), 31::size(5), len::size(24), part_rest::binary>>, data_full) do
+    decode_map(part_rest, data_full, 65821 + len)
   end
 
   def decode(<<@map::size(3), len::size(5), part_rest::binary>>, data_full) do
@@ -126,9 +183,7 @@ defmodule MMDB2Decoder.Data do
 
   # value decoding
 
-  defp decode_array(data_part, data_full, len) do
-    {data_part, size} = payload_len(data_part, len)
-
+  defp decode_array(data_part, data_full, size) do
     decode_array_rec(data_part, data_full, size, [])
   end
 
@@ -143,16 +198,12 @@ defmodule MMDB2Decoder.Data do
   end
 
   defp decode_binary(data_part, len) do
-    {data_part, len} = payload_len(data_part, len)
-
     <<value::size(len)-binary, rest::binary>> = data_part
 
     {value, rest}
   end
 
-  defp decode_map(data_part, data_full, len) do
-    {data_part, size} = payload_len(data_part, len)
-
+  defp decode_map(data_part, data_full, size) do
     decode_map_rec(data_part, data_full, size, %{})
   end
 
@@ -180,20 +231,4 @@ defmodule MMDB2Decoder.Data do
 
     {value, rest}
   end
-
-  # payload detection
-
-  defp payload_len(<<len::size(8), data::binary>>, 29) do
-    {data, 29 + len}
-  end
-
-  defp payload_len(<<len::size(16), data::binary>>, 30) do
-    {data, 285 + len}
-  end
-
-  defp payload_len(<<len::size(24), data::binary>>, 31) do
-    {data, 65821 + len}
-  end
-
-  defp payload_len(data, len), do: {data, len}
 end
