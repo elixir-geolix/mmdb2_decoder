@@ -69,25 +69,25 @@ defmodule MMDB2Decoder.Data do
         <<@extended::size(3), 29::size(5), len::size(8), @extended_array, part_rest::binary>>,
         data_full
       ) do
-    decode_array(part_rest, data_full, 28 + len)
+    decode_array(part_rest, data_full, 28 + len, [])
   end
 
   def decode(
         <<@extended::size(3), 30::size(5), len::size(16), @extended_array, part_rest::binary>>,
         data_full
       ) do
-    decode_array(part_rest, data_full, 285 + len)
+    decode_array(part_rest, data_full, 285 + len, [])
   end
 
   def decode(
         <<@extended::size(3), 31::size(5), len::size(24), @extended_array, part_rest::binary>>,
         data_full
       ) do
-    decode_array(part_rest, data_full, 65821 + len)
+    decode_array(part_rest, data_full, 65821 + len, [])
   end
 
   def decode(<<@extended::size(3), len::size(5), @extended_array, part_rest::binary>>, data_full) do
-    decode_array(part_rest, data_full, len)
+    decode_array(part_rest, data_full, len, [])
   end
 
   def decode(<<@extended::size(3), value::size(5), @extended_bool, part_rest::binary>>, _) do
@@ -128,19 +128,19 @@ defmodule MMDB2Decoder.Data do
   end
 
   def decode(<<@map::size(3), 29::size(5), len::size(8), part_rest::binary>>, data_full) do
-    decode_map(part_rest, data_full, 28 + len)
+    decode_map(part_rest, data_full, 28 + len, %{})
   end
 
   def decode(<<@map::size(3), 30::size(5), len::size(16), part_rest::binary>>, data_full) do
-    decode_map(part_rest, data_full, 285 + len)
+    decode_map(part_rest, data_full, 285 + len, %{})
   end
 
   def decode(<<@map::size(3), 31::size(5), len::size(24), part_rest::binary>>, data_full) do
-    decode_map(part_rest, data_full, 65821 + len)
+    decode_map(part_rest, data_full, 65821 + len, %{})
   end
 
   def decode(<<@map::size(3), len::size(5), part_rest::binary>>, data_full) do
-    decode_map(part_rest, data_full, len)
+    decode_map(part_rest, data_full, len, %{})
   end
 
   def decode(<<@pointer::size(3), 0::size(2), offset::size(11), part_rest::bitstring>>, data_full) do
@@ -183,18 +183,14 @@ defmodule MMDB2Decoder.Data do
 
   # value decoding
 
-  defp decode_array(data_part, data_full, size) do
-    decode_array_rec(data_part, data_full, size, [])
-  end
-
-  defp decode_array_rec(data_part, _, 0, acc) do
+  defp decode_array(data_part, _, 0, acc) do
     {Enum.reverse(acc), data_part}
   end
 
-  defp decode_array_rec(data_part, data_full, size, acc) do
+  defp decode_array(data_part, data_full, size, acc) do
     {value, rest} = decode(data_part, data_full)
 
-    decode_array_rec(rest, data_full, size - 1, [value | acc])
+    decode_array(rest, data_full, size - 1, [value | acc])
   end
 
   defp decode_binary(data_part, len) do
@@ -203,21 +199,17 @@ defmodule MMDB2Decoder.Data do
     {value, rest}
   end
 
-  defp decode_map(data_part, data_full, size) do
-    decode_map_rec(data_part, data_full, size, %{})
-  end
-
-  defp decode_map_rec(data_part, _, 0, acc) do
+  defp decode_map(data_part, _, 0, acc) do
     {acc, data_part}
   end
 
-  defp decode_map_rec(data_part, data_full, size, acc) do
+  defp decode_map(data_part, data_full, size, acc) do
     {key, part_rest} = decode(data_part, data_full)
     {value, dec_rest} = decode(part_rest, data_full)
 
     acc = Map.put(acc, String.to_atom(key), value)
 
-    decode_map_rec(dec_rest, data_full, size - 1, acc)
+    decode_map(dec_rest, data_full, size - 1, acc)
   end
 
   defp decode_signed(data_part, bitlen) do
