@@ -40,6 +40,15 @@ MMDB2Decoder.lookup(ip, meta, tree, data)
 |> MMDB2Decoder.pipe_lookup({8, 8, 8, 8})
 ```
 
+### Floating Point Precision
+
+Please be aware that all values of the type `float` are rounded to 4 decimal
+digits and `double` values to 8 decimal digits.
+
+This might be changed in the future if there are datasets known to return
+values with a higher precision.
+
+
 ## License
 
 [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
