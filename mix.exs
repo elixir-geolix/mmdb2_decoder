@@ -31,7 +31,7 @@ defmodule MMDB2Decoder.Mixfile do
     [
       {:benchee, "~> 0.11.0", only: :dev},
       {:ex_doc, ">= 0.0.0", only: :dev},
-      {:excoveralls, "~> 0.7", only: :test},
+      {:excoveralls, "~> 0.8", only: :test},
       {:hackney, "~> 1.0", only: :test}
     ]
   end
