@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.2.0-dev
+## v0.2.0 (2018-02-17)
 
 - Enhancements
     - Parsing speed has been improved

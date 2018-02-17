@@ -7,7 +7,7 @@ Add the module as a dependency to your `mix.exs` file:
 ```elixir
 defp deps do
   [
-    {:mmdb2_decoder, "~> 0.1.0"}
+    {:mmdb2_decoder, "~> 0.2.0"}
   ]
 end
 ```
