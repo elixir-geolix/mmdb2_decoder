@@ -48,6 +48,12 @@ digits and `double` values to 8 decimal digits.
 This might be changed in the future if there are datasets known to return
 values with a higher precision.
 
+## Benchmark
+
+A (minimal) benchmark script looking up random ip addresses is included:
+
+```shell
+mix run bench/lookup.exs
 
 ## License
 
