@@ -38,8 +38,7 @@ defmodule MMDB2Decoder.Mixfile do
 
   defp docs do
     [
-      extras: ["CHANGELOG.md", "README.md"],
-      main: "readme",
+      main: "MMDB2Decoder",
       source_ref: "master",
       source_url: @url_github
     ]
