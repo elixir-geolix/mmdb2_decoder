@@ -24,29 +24,28 @@ end
 
 ## Usage
 
+For more detailed examples and usage information please refer to the
+inline documentation of the `MMDB2Decoder` module.
+
+### Regular Flow
+
 ```elixir
-# "regular" flow
 database = File.read!("/path/to/database.mmdb")
 {meta, tree, data} = MMDB2Decoder.parse_database(database)
 
 {:ok, ip} = :inet.parse_address(String.to_charlist("8.8.8.8"))
 
 MMDB2Decoder.lookup(ip, meta, tree, data)
+```
 
-# "piping" flow
+### Direct Piping
+
+```elixir
 "/path/to/database.mmdb"
 |> File.read!()
 |> MMDB2Decoder.parse_database()
 |> MMDB2Decoder.pipe_lookup({8, 8, 8, 8})
 ```
-
-### Floating Point Precision
-
-Please be aware that all values of the type `float` are rounded to 4 decimal
-digits and `double` values to 8 decimal digits.
-
-This might be changed in the future if there are datasets known to return
-values with a higher precision.
 
 ## Benchmark
 
