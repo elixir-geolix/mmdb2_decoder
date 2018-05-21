@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.3.0-dev
+
+- Enhancements
+    - Errors from `MMDB2Decoder.parse_database/1` are now returned
+      from the `MMDB2Decoder.pipe_lookup/2` function instead of
+      raising a `FunctionClauseError`
+
 ## v0.2.0 (2018-02-17)
 
 - Enhancements
