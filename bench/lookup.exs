@@ -30,7 +30,7 @@ defmodule MMDB2Decoder.Benchmark do
         end
       },
       warmup: 2,
-      time: 30
+      time: 10
     )
   end
 end
