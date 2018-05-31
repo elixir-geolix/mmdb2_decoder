@@ -32,7 +32,8 @@ defmodule MMDB2Decoder.Mixfile do
       {:benchee, "~> 0.11.0", only: :dev},
       {:ex_doc, ">= 0.0.0", only: :dev},
       {:excoveralls, "~> 0.8", only: :test},
-      {:hackney, "~> 1.0", only: :test}
+      {:hackney, "~> 1.0", only: :test},
+      {:geolix_testdata, "~> 0.2.0", only: :dev}
     ]
   end
 

@@ -1,7 +1,7 @@
 defmodule MMDB2Decoder.Benchmark do
   def run() do
     database =
-      [__DIR__, "../data/GeoLite2-City.mmdb"]
+      [Geolix.TestData.dir(:mmdb2), "Benchmark.mmdb"]
       |> Path.join()
       |> Path.expand()
 
@@ -17,16 +17,16 @@ defmodule MMDB2Decoder.Benchmark do
       |> File.read!()
       |> MMDB2Decoder.parse_database()
 
+    {:ok, lookup_ipv4} = :inet.parse_address('1.1.1.1')
+    {:ok, lookup_ipv4_in_ipv6} = :inet.parse_address('::1.1.1.1')
+
     Benchee.run(
       %{
-        "random ip lookup" => fn ->
-          {
-            :rand.uniform(255),
-            :rand.uniform(255),
-            :rand.uniform(255),
-            :rand.uniform(255)
-          }
-          |> MMDB2Decoder.lookup(meta, tree, data)
+        "IPv4 in IPV6 lookup" => fn ->
+          MMDB2Decoder.lookup(lookup_ipv4_in_ipv6, meta, tree, data)
+        end,
+        "IPv4 lookup" => fn ->
+          MMDB2Decoder.lookup(lookup_ipv4, meta, tree, data)
         end
       },
       warmup: 2,
