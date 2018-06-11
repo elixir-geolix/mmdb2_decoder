@@ -53,6 +53,7 @@ A (minimal) benchmark script looking up random ip addresses is included:
 
 ```shell
 mix run bench/lookup.exs
+```
 
 ## License
 
