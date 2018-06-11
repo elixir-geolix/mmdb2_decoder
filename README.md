@@ -52,7 +52,7 @@ MMDB2Decoder.lookup(ip, meta, tree, data)
 A (minimal) benchmark script looking up random ip addresses is included:
 
 ```shell
-mix run bench/lookup.exs
+mix bench.lookup
 ```
 
 ## License

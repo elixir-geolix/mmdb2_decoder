@@ -9,12 +9,14 @@ defmodule MMDB2Decoder.Mixfile do
       name: "MMDB2 Decoder",
       version: "0.3.0-dev",
       elixir: "~> 1.3",
+      aliases: aliases(),
       deps: deps(),
       description: "MMDB2 File Format Decoder",
       docs: docs(),
       elixirc_paths: elixirc_paths(Mix.env()),
       package: package(),
       preferred_cli_env: [
+        "bench.lookup": :bench,
         coveralls: :test,
         "coveralls.detail": :test,
         "coveralls.travis": :test
@@ -27,13 +29,19 @@ defmodule MMDB2Decoder.Mixfile do
     [applications: [:logger]]
   end
 
+  defp aliases() do
+    [
+      "bench.lookup": ["run bench/lookup.exs"]
+    ]
+  end
+
   defp deps do
     [
-      {:benchee, "~> 0.11.0", only: :dev},
+      {:benchee, "~> 0.11.0", only: :bench},
       {:ex_doc, ">= 0.0.0", only: :dev},
       {:excoveralls, "~> 0.8", only: :test},
-      {:hackney, "~> 1.0", only: :test},
-      {:geolix_testdata, "~> 0.2.0", only: :dev}
+      {:geolix_testdata, "~> 0.2.0", only: :bench},
+      {:hackney, "~> 1.0", only: :test}
     ]
   end
 
