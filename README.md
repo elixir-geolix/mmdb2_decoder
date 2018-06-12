@@ -49,7 +49,7 @@ MMDB2Decoder.lookup(ip, meta, tree, data)
 
 ## Benchmark
 
-A (minimal) benchmark script looking up random ip addresses is included:
+A (minimal) benchmark script looking up a predefined ip address is included:
 
 ```shell
 mix bench.lookup
