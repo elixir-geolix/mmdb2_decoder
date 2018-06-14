@@ -1,4 +1,4 @@
-defmodule MMDB2Decoder.Benchmark do
+defmodule MMDB2Decoder.Benchmark.Lookup do
   def run() do
     database =
       [Geolix.TestData.dir(:mmdb2), "Benchmark.mmdb"]
@@ -35,4 +35,4 @@ defmodule MMDB2Decoder.Benchmark do
   end
 end
 
-MMDB2Decoder.Benchmark.run()
+MMDB2Decoder.Benchmark.Lookup.run()
