@@ -72,8 +72,7 @@ defmodule MMDB2Decoder.LookupTree do
     0
   end
 
-  defp read_node(node, index, meta, tree) do
-    record_size = meta.record_size
+  defp read_node(node, index, %{record_size: record_size}, tree) do
     record_half = rem(record_size, 8)
     record_left = record_size - record_half
 
