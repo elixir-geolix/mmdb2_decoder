@@ -59,20 +59,17 @@ defmodule MMDB2Decoder.LookupTree do
     traverse(path, bit + 1, bit_count, node, meta, tree)
   end
 
-  defp traverse(_, _, _, node, meta, _) do
-    node_count = meta.node_count
+  defp traverse(_, _, _, node, %{node_count: node_count}, _)
+       when node > node_count,
+       do: node
 
-    cond do
-      node > node_count ->
-        node
+  defp traverse(_, _, _, node, %{node_count: node_count}, _)
+       when node == node_count,
+       do: 0
 
-      node == node_count ->
-        0
-
-      true ->
-        Logger.error("Invalid node below node_count: #{node}")
-        0
-    end
+  defp traverse(_, _, _, node, _, _) do
+    Logger.error("Invalid node below node_count: #{node}")
+    0
   end
 
   defp read_node(node, index, meta, tree) do
