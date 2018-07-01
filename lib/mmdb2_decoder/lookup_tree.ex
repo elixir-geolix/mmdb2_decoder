@@ -50,9 +50,7 @@ defmodule MMDB2Decoder.LookupTree do
 
   defp traverse(path, bit, bit_count, node, %{node_count: node_count} = meta, tree)
        when bit < bit_count and node < node_count do
-    rest_size = bit_count - bit - 1
-
-    <<_::size(bit), node_bit::size(1), _::size(rest_size)>> = path
+    <<_::size(bit), node_bit::size(1), _::bitstring>> = path
 
     node = read_node(node, node_bit, meta, tree)
 
