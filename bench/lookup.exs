@@ -29,6 +29,7 @@ defmodule MMDB2Decoder.Benchmark.Lookup do
           MMDB2Decoder.lookup(lookup_ipv4, meta, tree, data)
         end
       },
+      formatter_options: %{console: %{comparison: false}},
       warmup: 2,
       time: 10
     )
