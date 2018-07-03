@@ -18,54 +18,52 @@ defmodule MMDB2Decoder.LookupTree do
   end
 
   def locate({a, b, c, d}, %{ip_version: 6} = meta, tree) do
-    <<a::size(8), b::size(8), c::size(8), d::size(8)>>
-    |> traverse(0, 32, 96, meta, tree)
+    traverse(<<a::size(8), b::size(8), c::size(8), d::size(8)>>, 96, meta, tree)
   end
 
   def locate({a, b, c, d}, meta, tree) do
-    <<a::size(8), b::size(8), c::size(8), d::size(8)>>
-    |> traverse(0, 32, 0, meta, tree)
+    traverse(<<a::size(8), b::size(8), c::size(8), d::size(8)>>, 0, meta, tree)
   end
 
   def locate({_, _, _, _, _, _, _, _}, %{ip_version: 4}, _), do: 0
 
   def locate({a, b, c, d, e, f, g, h}, meta, tree) do
-    <<
-      a::size(16),
-      b::size(16),
-      c::size(16),
-      d::size(16),
-      e::size(16),
-      f::size(16),
-      g::size(16),
-      h::size(16)
-    >>
-    |> traverse(0, 128, 0, meta, tree)
+    traverse(
+      <<
+        a::size(16),
+        b::size(16),
+        c::size(16),
+        d::size(16),
+        e::size(16),
+        f::size(16),
+        g::size(16),
+        h::size(16)
+      >>,
+      0,
+      meta,
+      tree
+    )
   end
 
   defp traverse(
          <<node_bit::size(1), rest::bitstring>>,
-         bit,
-         bit_count,
          node,
          %{node_count: node_count} = meta,
          tree
        )
-       when bit < bit_count and node < node_count do
-    node = read_node(node, node_bit, meta, tree)
-
-    traverse(rest, bit + 1, bit_count, node, meta, tree)
+       when node < node_count do
+    traverse(rest, read_node(node, node_bit, meta, tree), meta, tree)
   end
 
-  defp traverse(_, _, _, node, %{node_count: node_count}, _)
+  defp traverse(_, node, %{node_count: node_count}, _)
        when node > node_count,
        do: node
 
-  defp traverse(_, _, _, node, %{node_count: node_count}, _)
+  defp traverse(_, node, %{node_count: node_count}, _)
        when node == node_count,
        do: 0
 
-  defp traverse(_, _, _, node, _, _) do
+  defp traverse(_, node, _, _) do
     Logger.error("Invalid node below node_count: #{node}")
     0
   end
