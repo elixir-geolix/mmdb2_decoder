@@ -57,11 +57,6 @@ defmodule MMDB2Decoder.LookupTree do
     traverse(rest, bit + 1, bit_count, node, meta, tree)
   end
 
-  defp traverse(_, bit, bit_count, node, %{node_count: node_count} = meta, _)
-       when bit < bit_count and node >= node_count do
-    traverse(nil, nil, nil, node, meta, nil)
-  end
-
   defp traverse(_, _, _, node, %{node_count: node_count}, _)
        when node > node_count,
        do: node
