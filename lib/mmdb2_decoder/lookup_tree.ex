@@ -43,18 +43,23 @@ defmodule MMDB2Decoder.LookupTree do
     |> traverse(0, 128, 0, meta, tree)
   end
 
+  defp traverse(
+         <<node_bit::size(1), rest::bitstring>>,
+         bit,
+         bit_count,
+         node,
+         %{node_count: node_count} = meta,
+         tree
+       )
+       when bit < bit_count and node < node_count do
+    node = read_node(node, node_bit, meta, tree)
+
+    traverse(rest, bit + 1, bit_count, node, meta, tree)
+  end
+
   defp traverse(_, bit, bit_count, node, %{node_count: node_count} = meta, _)
        when bit < bit_count and node >= node_count do
     traverse(nil, nil, nil, node, meta, nil)
-  end
-
-  defp traverse(path, bit, bit_count, node, %{node_count: node_count} = meta, tree)
-       when bit < bit_count and node < node_count do
-    <<_::size(bit), node_bit::size(1), _::bitstring>> = path
-
-    node = read_node(node, node_bit, meta, tree)
-
-    traverse(path, bit + 1, bit_count, node, meta, tree)
   end
 
   defp traverse(_, _, _, node, %{node_count: node_count}, _)
