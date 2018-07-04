@@ -69,18 +69,22 @@ defmodule MMDB2Decoder.LookupTree do
   end
 
   defp read_node(node, index, %{record_size: record_size}, tree) do
-    record_half = rem(record_size, 8)
-    record_left = record_size - record_half
-
     node_start = div(node * record_size, 4)
     node_len = div(record_size, 4)
     node_part = binary_part(tree, node_start, node_len)
 
-    <<low::size(record_left), high::size(record_half), right::size(record_size)>> = node_part
-
     case index do
-      0 -> low + (high <<< record_left)
-      1 -> right
+      0 ->
+        record_half = rem(record_size, 8)
+        record_left = record_size - record_half
+
+        <<low::size(record_left), high::size(record_half), _::bitstring>> = node_part
+
+        low + (high <<< record_left)
+
+      1 ->
+        <<_::size(record_size), right::size(record_size)>> = node_part
+        right
     end
   end
 end
