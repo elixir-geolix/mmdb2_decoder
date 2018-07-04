@@ -13,10 +13,6 @@ defmodule MMDB2Decoder.LookupTree do
   Locates the data pointer associated for a given IP.
   """
   @spec locate(tuple, Metadata.t(), binary) :: non_neg_integer
-  def locate({0, 0, 0, 0, 0, 65535, a, b}, meta, tree) do
-    locate({a >>> 8, a &&& 0x00FF, b >>> 8, b &&& 0x00FF}, meta, tree)
-  end
-
   def locate(
         {a, b, c, d},
         %{ip_version: 6, node_count: node_count, record_size: record_size},
@@ -37,6 +33,10 @@ defmodule MMDB2Decoder.LookupTree do
         tree
       ) do
     traverse(<<a::size(8), b::size(8), c::size(8), d::size(8)>>, 0, node_count, record_size, tree)
+  end
+
+  def locate({0, 0, 0, 0, 0, 65535, a, b}, meta, tree) do
+    locate({a >>> 8, a &&& 0x00FF, b >>> 8, b &&& 0x00FF}, meta, tree)
   end
 
   def locate({_, _, _, _, _, _, _, _}, %{ip_version: 4}, _), do: 0
