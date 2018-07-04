@@ -17,17 +17,35 @@ defmodule MMDB2Decoder.LookupTree do
     locate({a >>> 8, a &&& 0x00FF, b >>> 8, b &&& 0x00FF}, meta, tree)
   end
 
-  def locate({a, b, c, d}, %{ip_version: 6} = meta, tree) do
-    traverse(<<a::size(8), b::size(8), c::size(8), d::size(8)>>, 96, meta, tree)
+  def locate(
+        {a, b, c, d},
+        %{ip_version: 6, node_count: node_count, record_size: record_size},
+        tree
+      ) do
+    traverse(
+      <<a::size(8), b::size(8), c::size(8), d::size(8)>>,
+      96,
+      node_count,
+      record_size,
+      tree
+    )
   end
 
-  def locate({a, b, c, d}, meta, tree) do
-    traverse(<<a::size(8), b::size(8), c::size(8), d::size(8)>>, 0, meta, tree)
+  def locate(
+        {a, b, c, d},
+        %{node_count: node_count, record_size: record_size},
+        tree
+      ) do
+    traverse(<<a::size(8), b::size(8), c::size(8), d::size(8)>>, 0, node_count, record_size, tree)
   end
 
   def locate({_, _, _, _, _, _, _, _}, %{ip_version: 4}, _), do: 0
 
-  def locate({a, b, c, d, e, f, g, h}, meta, tree) do
+  def locate(
+        {a, b, c, d, e, f, g, h},
+        %{node_count: node_count, record_size: record_size},
+        tree
+      ) do
     traverse(
       <<
         a::size(16),
@@ -40,7 +58,8 @@ defmodule MMDB2Decoder.LookupTree do
         h::size(16)
       >>,
       0,
-      meta,
+      node_count,
+      record_size,
       tree
     )
   end
@@ -48,27 +67,34 @@ defmodule MMDB2Decoder.LookupTree do
   defp traverse(
          <<node_bit::size(1), rest::bitstring>>,
          node,
-         %{node_count: node_count} = meta,
+         node_count,
+         record_size,
          tree
        )
        when node < node_count do
-    traverse(rest, read_node(node, node_bit, meta, tree), meta, tree)
+    traverse(
+      rest,
+      read_node(node, node_bit, record_size, tree),
+      node_count,
+      record_size,
+      tree
+    )
   end
 
-  defp traverse(_, node, %{node_count: node_count}, _)
+  defp traverse(_, node, node_count, _, _)
        when node > node_count,
        do: node
 
-  defp traverse(_, node, %{node_count: node_count}, _)
+  defp traverse(_, node, node_count, _, _)
        when node == node_count,
        do: 0
 
-  defp traverse(_, node, _, _) do
+  defp traverse(_, node, _, _, _) do
     Logger.error("Invalid node below node_count: #{node}")
     0
   end
 
-  defp read_node(node, index, %{record_size: record_size}, tree) do
+  defp read_node(node, index, record_size, tree) do
     node_start = div(node * record_size, 4)
     node_len = div(record_size, 4)
     node_part = binary_part(tree, node_start, node_len)
