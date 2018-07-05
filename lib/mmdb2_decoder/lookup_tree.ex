@@ -89,7 +89,8 @@ defmodule MMDB2Decoder.LookupTree do
        when node == node_count,
        do: 0
 
-  defp traverse(_, node, _, _, _) do
+  defp traverse(_, node, node_count, _, _)
+       when node < node_count do
     Logger.error("Invalid node below node_count: #{node}")
     0
   end
