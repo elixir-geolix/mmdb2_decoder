@@ -12,8 +12,8 @@ defmodule MMDB2Decoder.Database do
   @spec lookup_pointer(non_neg_integer, binary, Metadata.t()) :: map | nil
   def lookup_pointer(0, _, _), do: nil
 
-  def lookup_pointer(ptr, data, meta) do
-    offset = ptr - meta.node_count - 16
+  def lookup_pointer(ptr, data, %{node_count: node_count}) do
+    offset = ptr - node_count - 16
 
     case Data.value(data, offset) do
       result when is_map(result) -> result
@@ -28,17 +28,18 @@ defmodule MMDB2Decoder.Database do
   def split_data(meta, data) do
     meta = Data.value(meta, 0)
     meta = struct(%Metadata{}, meta)
-    record_size = Map.get(meta, :record_size)
-    node_count = Map.get(meta, :node_count)
+
+    %{node_count: node_count, record_size: record_size} = meta
+
     node_byte_size = div(record_size, 4)
     tree_size = node_count * node_byte_size
 
     meta = %{meta | node_byte_size: node_byte_size}
     meta = %{meta | tree_size: tree_size}
 
-    tree = data |> binary_part(0, tree_size)
+    tree = binary_part(data, 0, tree_size)
     data_size = byte_size(data) - byte_size(tree) - 16
-    data = data |> binary_part(tree_size + 16, data_size)
+    data = binary_part(data, tree_size + 16, data_size)
 
     {meta, tree, data}
   end
