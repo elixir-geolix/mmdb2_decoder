@@ -9,16 +9,11 @@ defmodule MMDB2Decoder.Database do
   @doc """
   Looks up a pointer in a database.
   """
-  @spec lookup_pointer(non_neg_integer, binary, Metadata.t()) :: map | nil
+  @spec lookup_pointer(non_neg_integer, binary, Metadata.t()) :: term
   def lookup_pointer(0, _, _), do: nil
 
   def lookup_pointer(ptr, data, %{node_count: node_count}) do
-    offset = ptr - node_count - 16
-
-    case Data.value(data, offset) do
-      result when is_map(result) -> result
-      _ -> nil
-    end
+    Data.value(data, ptr - node_count - 16)
   end
 
   @doc """

@@ -54,7 +54,7 @@ defmodule MMDB2Decoder do
   The values for `meta`, `tree` and `data` can be obtained by
   parsing the file contents of a database using `parse_database/1`.
   """
-  @spec lookup(:inet.ip_address(), Metadata.t(), binary, binary) :: map | nil
+  @spec lookup(:inet.ip_address(), Metadata.t(), binary, binary) :: term
   def lookup(ip, meta, tree, data) do
     ip
     |> LookupTree.locate(meta, tree)
@@ -106,7 +106,7 @@ defmodule MMDB2Decoder do
       %{...}
   """
   @spec pipe_lookup({Metadata.t(), binary, binary} | {:error, term}, :inet.ip_address()) ::
-          map | nil | {:error, term}
+          term | {:error, term}
   def pipe_lookup({:error, _} = error, _), do: error
   def pipe_lookup({meta, tree, data}, ip), do: lookup(ip, meta, tree, data)
 end
