@@ -22,11 +22,11 @@ defmodule MMDB2Decoder.Benchmark.Lookup do
 
     Benchee.run(
       %{
-        "IPv4 in IPV6 lookup" => fn ->
-          MMDB2Decoder.lookup(lookup_ipv4_in_ipv6, meta, tree, data)
-        end,
-        "IPv4 lookup" => fn ->
+        "Lookup: IPv4" => fn ->
           MMDB2Decoder.lookup(lookup_ipv4, meta, tree, data)
+        end,
+        "Lookup: IPv4 in IPV6" => fn ->
+          MMDB2Decoder.lookup(lookup_ipv4_in_ipv6, meta, tree, data)
         end
       },
       formatter_options: %{console: %{comparison: false}},
