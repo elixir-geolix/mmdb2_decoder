@@ -16,6 +16,7 @@ defmodule MMDB2Decoder.Mixfile do
       elixirc_paths: elixirc_paths(Mix.env()),
       package: package(),
       preferred_cli_env: [
+        "bench.database": :bench,
         "bench.lookup": :bench,
         coveralls: :test,
         "coveralls.detail": :test,
@@ -31,6 +32,7 @@ defmodule MMDB2Decoder.Mixfile do
 
   defp aliases() do
     [
+      "bench.database": ["run bench/database.exs"],
       "bench.lookup": ["run bench/lookup.exs"]
     ]
   end
