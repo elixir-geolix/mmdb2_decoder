@@ -33,6 +33,9 @@ defmodule MMDB2Decoder do
   alias MMDB2Decoder.LookupTree
   alias MMDB2Decoder.Metadata
 
+  @type lookup_result :: term
+  @type parse_result :: {Metadata.t(), binary, binary} | {:error, term}
+
   @metadata_marker <<0xAB, 0xCD, 0xEF>> <> "MaxMind.com"
 
   @doc """
@@ -54,7 +57,7 @@ defmodule MMDB2Decoder do
   The values for `meta`, `tree` and `data` can be obtained by
   parsing the file contents of a database using `parse_database/1`.
   """
-  @spec lookup(:inet.ip_address(), Metadata.t(), binary, binary) :: term
+  @spec lookup(:inet.ip_address(), Metadata.t(), binary, binary) :: lookup_result
   def lookup(ip, meta, tree, data) do
     ip
     |> LookupTree.locate(meta, tree)
@@ -81,9 +84,7 @@ defmodule MMDB2Decoder do
       iex> MMDB2Decoder.parse_database("invalid-database-contents")
       {:error, :no_metadata}
   """
-  @spec parse_database(binary) ::
-          {Metadata.t(), binary, binary}
-          | {:error, term}
+  @spec parse_database(binary) :: parse_result
   def parse_database(contents) do
     case :binary.split(contents, @metadata_marker) do
       [_] -> {:error, :no_metadata}
@@ -105,8 +106,7 @@ defmodule MMDB2Decoder do
       ...> |> MMDB2Decoder.pipe_lookup({127, 0, 0, 1})
       %{...}
   """
-  @spec pipe_lookup({Metadata.t(), binary, binary} | {:error, term}, :inet.ip_address()) ::
-          term | {:error, term}
+  @spec pipe_lookup(parse_result, :inet.ip_address()) :: lookup_result | {:error, term}
   def pipe_lookup({:error, _} = error, _), do: error
   def pipe_lookup({meta, tree, data}, ip), do: lookup(ip, meta, tree, data)
 end
