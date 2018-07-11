@@ -49,11 +49,8 @@ MMDB2Decoder.lookup(ip, meta, tree, data)
 
 ## Benchmark
 
-A (minimal) benchmark script looking up a predefined ip address is included:
-
-```shell
-mix bench.lookup
-```
+Several (minimal) benchmark scripts are included. Please refer to the
+Mixfile or `mix help` output for their names.
 
 ## License
 
