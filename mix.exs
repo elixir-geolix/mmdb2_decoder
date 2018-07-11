@@ -18,6 +18,7 @@ defmodule MMDB2Decoder.Mixfile do
       preferred_cli_env: [
         "bench.database": :bench,
         "bench.lookup": :bench,
+        "bench.parse": :bench,
         coveralls: :test,
         "coveralls.detail": :test,
         "coveralls.travis": :test
@@ -33,7 +34,8 @@ defmodule MMDB2Decoder.Mixfile do
   defp aliases() do
     [
       "bench.database": ["run bench/database.exs"],
-      "bench.lookup": ["run bench/lookup.exs"]
+      "bench.lookup": ["run bench/lookup.exs"],
+      "bench.parse": ["run bench/parse.exs"]
     ]
   end
 
