@@ -7,7 +7,9 @@ Add the module as a dependency to your `mix.exs` file:
 ```elixir
 defp deps do
   [
-    {:mmdb2_decoder, "~> 0.2.0"}
+    # ...
+    {:mmdb2_decoder, "~> 0.2.0"},
+    # ...
   ]
 end
 ```
@@ -17,7 +19,11 @@ Depending on your elixir version you should also update your application list:
 ```elixir
 def application do
   [
-    included_applications: [:mmdb2_decoder]
+    included_applications: [
+      # ...
+      :mmdb2_decoder,
+      # ...
+    ]
   ]
 end
 ```
