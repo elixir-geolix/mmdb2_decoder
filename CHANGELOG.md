@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.3.0-dev
+## v0.3.0 (2018-07-13)
 
 - Enhancements
     - Errors from `MMDB2Decoder.parse_database/1` are now returned
