@@ -3,7 +3,7 @@ defmodule MMDB2Decoder.Data do
   Module for decoding the mmdb2 format byte streams.
   """
 
-  @type decoded :: atom | binary | boolean | list | map
+  @type decoded :: :cache | :end | binary | boolean | list | map | number
 
   # standard data types
   @binary 2
@@ -170,7 +170,7 @@ defmodule MMDB2Decoder.Data do
   @doc """
   Decodes the node at the given offset.
   """
-  @spec value(binary, non_neg_integer) :: decoded
+  @spec value(binary, non_neg_integer) :: decoded | nil
   def value(data, offset) when byte_size(data) > offset do
     <<_::size(offset)-binary, rest::binary>> = data
 
