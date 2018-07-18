@@ -115,7 +115,7 @@ defmodule MMDB2Decoder do
     :binary.split(
       contents,
       @metadata_marker,
-      [scope: {byte_size(contents), -@metadata_max_size}]
+      scope: {byte_size(contents), -@metadata_max_size}
     )
   end
 
