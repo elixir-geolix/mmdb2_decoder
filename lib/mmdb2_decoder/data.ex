@@ -1,7 +1,5 @@
 defmodule MMDB2Decoder.Data do
-  @moduledoc """
-  Module for decoding the mmdb2 format byte streams.
-  """
+  @moduledoc false
 
   @type decoded :: :cache | :end | binary | boolean | list | map | number
 

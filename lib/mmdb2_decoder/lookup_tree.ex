@@ -1,7 +1,5 @@
 defmodule MMDB2Decoder.LookupTree do
-  @moduledoc """
-  Locates IPs in the lookup tree.
-  """
+  @moduledoc false
 
   use Bitwise, only_operators: true
 

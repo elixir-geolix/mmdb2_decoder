@@ -1,7 +1,5 @@
 defmodule MMDB2Decoder.Database do
-  @moduledoc """
-  Main level database logic.
-  """
+  @moduledoc false
 
   alias MMDB2Decoder.Data
   alias MMDB2Decoder.Metadata
