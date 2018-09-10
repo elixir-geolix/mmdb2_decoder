@@ -36,9 +36,6 @@ defmodule MMDB2Decoder do
   @type lookup_result :: term
   @type parse_result :: {Metadata.t(), binary, binary} | {:error, term}
 
-  @metadata_marker <<0xAB, 0xCD, 0xEF>> <> "MaxMind.com"
-  @metadata_max_size 128 * 1024
-
   @doc """
   Looks up the data associated with an IP tuple.
 
@@ -87,7 +84,7 @@ defmodule MMDB2Decoder do
   """
   @spec parse_database(binary) :: parse_result
   def parse_database(contents) do
-    case split_database(contents) do
+    case Database.split_contents(contents) do
       [_] -> {:error, :no_metadata}
       [data, meta] -> Database.split_data(meta, data)
     end
@@ -110,14 +107,4 @@ defmodule MMDB2Decoder do
   @spec pipe_lookup(parse_result, :inet.ip_address()) :: lookup_result | {:error, term}
   def pipe_lookup({:error, _} = error, _), do: error
   def pipe_lookup({meta, tree, data}, ip), do: lookup(ip, meta, tree, data)
-
-  defp split_database(contents) when byte_size(contents) > @metadata_max_size do
-    :binary.split(
-      contents,
-      @metadata_marker,
-      scope: {byte_size(contents), -@metadata_max_size}
-    )
-  end
-
-  defp split_database(contents), do: :binary.split(contents, @metadata_marker)
 end

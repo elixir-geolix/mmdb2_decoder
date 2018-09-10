@@ -4,6 +4,9 @@ defmodule MMDB2Decoder.Database do
   alias MMDB2Decoder.Data
   alias MMDB2Decoder.Metadata
 
+  @metadata_marker <<0xAB, 0xCD, 0xEF>> <> "MaxMind.com"
+  @metadata_max_size 128 * 1024
+
   @doc """
   Looks up a pointer in a database.
   """
@@ -13,6 +16,19 @@ defmodule MMDB2Decoder.Database do
   def lookup_pointer(ptr, data, %{node_count: node_count}) do
     Data.value(data, ptr - node_count - 16)
   end
+
+  @doc """
+  Splits database contents into data and metadata.
+  """
+  def split_contents(contents) when byte_size(contents) > @metadata_max_size do
+    :binary.split(
+      contents,
+      @metadata_marker,
+      scope: {byte_size(contents), -@metadata_max_size}
+    )
+  end
+
+  def split_contents(contents), do: :binary.split(contents, @metadata_marker)
 
   @doc """
   Splits the data part according to a metadata definition.
