@@ -20,6 +20,7 @@ defmodule MMDB2Decoder.Database do
   @doc """
   Splits database contents into data and metadata.
   """
+  @spec split_contents(binary) :: list
   def split_contents(contents) when byte_size(contents) > @metadata_max_size do
     :binary.split(
       contents,
