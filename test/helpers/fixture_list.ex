@@ -3,13 +3,20 @@ defmodule MMDB2Decoder.TestHelpers.FixtureList do
 
   @baseurl "https://raw.githubusercontent.com/maxmind/MaxMind-DB/master/test-data"
   @fixtures [
-    {:fixture_decoder, "MaxMind-DB-test-decoder.mmdb", "#{@baseurl}/MaxMind-DB-test-decoder.mmdb"},
-    {:fixture_ipv4_24, "MaxMind-DB-test-ipv4-24.mmdb", "#{@baseurl}/MaxMind-DB-test-ipv4-24.mmdb"},
-    {:fixture_ipv4_28, "MaxMind-DB-test-ipv4-28.mmdb", "#{@baseurl}/MaxMind-DB-test-ipv4-28.mmdb"},
-    {:fixture_ipv4_32, "MaxMind-DB-test-ipv4-32.mmdb", "#{@baseurl}/MaxMind-DB-test-ipv4-32.mmdb"},
-    {:fixture_ipv6_24, "MaxMind-DB-test-ipv6-24.mmdb", "#{@baseurl}/MaxMind-DB-test-ipv6-24.mmdb"},
-    {:fixture_ipv6_28, "MaxMind-DB-test-ipv6-28.mmdb", "#{@baseurl}/MaxMind-DB-test-ipv6-28.mmdb"},
-    {:fixture_ipv6_32, "MaxMind-DB-test-ipv6-32.mmdb", "#{@baseurl}/MaxMind-DB-test-ipv6-32.mmdb"},
+    {:fixture_decoder, "MaxMind-DB-test-decoder.mmdb",
+     "#{@baseurl}/MaxMind-DB-test-decoder.mmdb"},
+    {:fixture_ipv4_24, "MaxMind-DB-test-ipv4-24.mmdb",
+     "#{@baseurl}/MaxMind-DB-test-ipv4-24.mmdb"},
+    {:fixture_ipv4_28, "MaxMind-DB-test-ipv4-28.mmdb",
+     "#{@baseurl}/MaxMind-DB-test-ipv4-28.mmdb"},
+    {:fixture_ipv4_32, "MaxMind-DB-test-ipv4-32.mmdb",
+     "#{@baseurl}/MaxMind-DB-test-ipv4-32.mmdb"},
+    {:fixture_ipv6_24, "MaxMind-DB-test-ipv6-24.mmdb",
+     "#{@baseurl}/MaxMind-DB-test-ipv6-24.mmdb"},
+    {:fixture_ipv6_28, "MaxMind-DB-test-ipv6-28.mmdb",
+     "#{@baseurl}/MaxMind-DB-test-ipv6-28.mmdb"},
+    {:fixture_ipv6_32, "MaxMind-DB-test-ipv6-32.mmdb",
+     "#{@baseurl}/MaxMind-DB-test-ipv6-32.mmdb"},
     {
       :fixture_broken_pointers,
       "MaxMind-DB-test-broken-pointers-24.mmdb",
