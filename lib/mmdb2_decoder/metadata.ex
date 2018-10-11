@@ -4,17 +4,17 @@ defmodule MMDB2Decoder.Metadata do
   """
 
   @type t :: %__MODULE__{
-          binary_format_major_version: integer,
-          binary_format_minor_version: integer,
-          build_epoch: integer,
+          binary_format_major_version: non_neg_integer,
+          binary_format_minor_version: non_neg_integer,
+          build_epoch: non_neg_integer,
           database_type: String.t(),
           description: map,
-          ip_version: integer,
+          ip_version: non_neg_integer,
           languages: list,
-          node_byte_size: integer,
-          node_count: integer,
-          record_size: integer,
-          tree_size: integer
+          node_byte_size: non_neg_integer,
+          node_count: non_neg_integer,
+          record_size: non_neg_integer,
+          tree_size: non_neg_integer
         }
 
   defstruct binary_format_major_version: 0,
