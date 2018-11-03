@@ -30,8 +30,7 @@ end
 
 ## Usage
 
-For more detailed examples and usage information please refer to the
-inline documentation of the `MMDB2Decoder` module.
+For more detailed examples and usage information please refer to the inline documentation of the `MMDB2Decoder` module.
 
 ### Regular Flow
 
@@ -55,20 +54,12 @@ MMDB2Decoder.lookup(ip, meta, tree, data)
 
 ## Benchmark
 
-Several (minimal) benchmark scripts are included. Please refer to the
-Mixfile or `mix help` output for their names.
+Several (minimal) benchmark scripts are included. Please refer to the Mixfile or `mix help` output for their names.
 
-By default the benchmarks use the `Benchmark.mmdb` database provided by
-`:geolix_testdata`. To use a different database pass it's path as the sole
-argument to an individual `mix bench.*` call. Please be aware that not all
-benchmark scripts are expected to work without the default database.
+By default the benchmarks use the `Benchmark.mmdb` database provided by `:geolix_testdata`. To use a different database pass it's path as the sole argument to an individual `mix bench.*` call. Please be aware that not all benchmark scripts are expected to work without the default database.
 
 ## License
 
 [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
 
-License information about the supported
-[MaxMind GeoIP2 Country](http://www.maxmind.com/en/country),
-[MaxMind GeoIP2 City](http://www.maxmind.com/en/city) and
-[MaxMind GeoLite2](http://dev.maxmind.com/geoip/geoip2/geolite2/) databases
-can be found on their respective sites.
+License information about the supported [MaxMind GeoIP2 Country](http://www.maxmind.com/en/country), [MaxMind GeoIP2 City](http://www.maxmind.com/en/city) and [MaxMind GeoLite2](http://dev.maxmind.com/geoip/geoip2/geolite2/) databases can be found on their respective sites.
