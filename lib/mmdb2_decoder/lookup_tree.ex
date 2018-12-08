@@ -3,14 +3,12 @@ defmodule MMDB2Decoder.LookupTree do
 
   use Bitwise, only_operators: true
 
-  require Logger
-
   alias MMDB2Decoder.Metadata
 
   @doc """
   Locates the data pointer associated for a given IP.
   """
-  @spec locate(tuple, Metadata.t(), binary) :: non_neg_integer
+  @spec locate(tuple, Metadata.t(), binary) :: non_neg_integer | {:error, term}
   def locate(
         {a, b, c, d},
         %{ip_version: 6, node_count: node_count, record_size: record_size},
@@ -88,10 +86,8 @@ defmodule MMDB2Decoder.LookupTree do
        do: 0
 
   defp traverse(_, node, node_count, _, _)
-       when node < node_count do
-    Logger.error("Invalid node below node_count: #{node}")
-    0
-  end
+       when node < node_count,
+      do: {:error, :node_below_count}
 
   defp read_node(node, index, record_size, tree) do
     node_start = div(node * record_size, 4)

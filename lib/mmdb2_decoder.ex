@@ -33,7 +33,7 @@ defmodule MMDB2Decoder do
   alias MMDB2Decoder.LookupTree
   alias MMDB2Decoder.Metadata
 
-  @type lookup_result :: term
+  @type lookup_result :: term | {:error, term}
   @type parse_result :: {Metadata.t(), binary, binary} | {:error, term}
 
   @doc """
@@ -57,9 +57,10 @@ defmodule MMDB2Decoder do
   """
   @spec lookup(:inet.ip_address(), Metadata.t(), binary, binary) :: lookup_result
   def lookup(ip, meta, tree, data) do
-    ip
-    |> LookupTree.locate(meta, tree)
-    |> Database.lookup_pointer(data, meta)
+    case LookupTree.locate(ip, meta, tree) do
+      {:error, _ } = error -> error
+      pointer -> Database.lookup_pointer(pointer, data, meta)
+    end
   end
 
   @doc """

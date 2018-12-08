@@ -27,12 +27,6 @@ defmodule MMDB2Decoder.Mixfile do
     ]
   end
 
-  def application do
-    [
-      extra_applications: [:logger]
-    ]
-  end
-
   defp aliases() do
     [
       "bench.database": ["run bench/database.exs"],
