@@ -87,7 +87,7 @@ defmodule MMDB2Decoder.LookupTree do
 
   defp traverse(_, node, node_count, _, _)
        when node < node_count,
-      do: {:error, :node_below_count}
+       do: {:error, :node_below_count}
 
   defp read_node(node, index, record_size, tree) do
     node_start = div(node * record_size, 4)

@@ -58,7 +58,7 @@ defmodule MMDB2Decoder do
   @spec lookup(:inet.ip_address(), Metadata.t(), binary, binary) :: lookup_result
   def lookup(ip, meta, tree, data) do
     case LookupTree.locate(ip, meta, tree) do
-      {:error, _ } = error -> error
+      {:error, _} = error -> error
       pointer -> Database.lookup_pointer(pointer, data, meta)
     end
   end
