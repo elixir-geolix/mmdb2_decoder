@@ -15,7 +15,7 @@ defmodule MMDB2Decoder.TestHelpers.FixtureDownload do
   @doc """
   Downloads all fixture files.
   """
-  def run(), do: Enum.each(FixtureList.get(), &download/1)
+  def run, do: Enum.each(FixtureList.get(), &download/1)
 
   defp download({_name, filename, remote}) do
     local = local(filename)

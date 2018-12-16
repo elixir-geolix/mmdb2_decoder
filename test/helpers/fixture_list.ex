@@ -41,7 +41,7 @@ defmodule MMDB2Decoder.TestHelpers.FixtureList do
       }
   """
   @spec get() :: list
-  def get(), do: @fixtures
+  def get, do: @fixtures
 
   Enum.each(@fixtures, fn {name, file, _} ->
     def fixture_name(unquote(name)), do: unquote(file)

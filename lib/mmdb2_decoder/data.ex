@@ -36,7 +36,7 @@ defmodule MMDB2Decoder.Data do
   end
 
   def decode(<<@binary::size(3), 31::size(5), len::size(24), part_rest::binary>>, _) do
-    decode_binary(part_rest, 65821 + len)
+    decode_binary(part_rest, 65_821 + len)
   end
 
   def decode(<<@binary::size(3), len::size(5), part_rest::binary>>, _) do
@@ -52,7 +52,7 @@ defmodule MMDB2Decoder.Data do
   end
 
   def decode(<<@bytes::size(3), 31::size(5), len::size(24), part_rest::binary>>, _) do
-    decode_binary(part_rest, 65821 + len)
+    decode_binary(part_rest, 65_821 + len)
   end
 
   def decode(<<@bytes::size(3), len::size(5), part_rest::binary>>, _) do
@@ -81,7 +81,7 @@ defmodule MMDB2Decoder.Data do
         <<@extended::size(3), 31::size(5), len::size(24), @extended_array, part_rest::binary>>,
         data_full
       ) do
-    decode_array(part_rest, data_full, 65821 + len, [])
+    decode_array(part_rest, data_full, 65_821 + len, [])
   end
 
   def decode(<<@extended::size(3), len::size(5), @extended_array, part_rest::binary>>, data_full) do
@@ -134,7 +134,7 @@ defmodule MMDB2Decoder.Data do
   end
 
   def decode(<<@map::size(3), 31::size(5), len::size(24), part_rest::binary>>, data_full) do
-    decode_map(part_rest, data_full, 65821 + len, [])
+    decode_map(part_rest, data_full, 65_821 + len, [])
   end
 
   def decode(<<@map::size(3), len::size(5), part_rest::binary>>, data_full) do

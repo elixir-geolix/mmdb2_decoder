@@ -90,7 +90,7 @@ defmodule MMDB2Decoder.DataTest do
 
     assert meta.record_size == 24
 
-    result = MMDB2Decoder.lookup({0, 0, 0, 0, 0, 65535, 257, 257}, meta, tree, data)
+    result = MMDB2Decoder.lookup({0, 0, 0, 0, 0, 65_535, 257, 257}, meta, tree, data)
 
     assert result == %{ip: "1.1.1.1"}
   end
@@ -103,7 +103,7 @@ defmodule MMDB2Decoder.DataTest do
 
     assert meta.record_size == 28
 
-    result = MMDB2Decoder.lookup({0, 0, 0, 0, 0, 65535, 257, 257}, meta, tree, data)
+    result = MMDB2Decoder.lookup({0, 0, 0, 0, 0, 65_535, 257, 257}, meta, tree, data)
 
     assert result == %{ip: "1.1.1.1"}
   end
@@ -116,7 +116,7 @@ defmodule MMDB2Decoder.DataTest do
 
     assert meta.record_size == 32
 
-    result = MMDB2Decoder.lookup({0, 0, 0, 0, 0, 65535, 257, 257}, meta, tree, data)
+    result = MMDB2Decoder.lookup({0, 0, 0, 0, 0, 65_535, 257, 257}, meta, tree, data)
 
     assert result == %{ip: "1.1.1.1"}
   end
