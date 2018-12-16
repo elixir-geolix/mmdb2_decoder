@@ -24,4 +24,8 @@ jobs:
     - stage: code quality
       elixir: 1.7.3
       otp_release: 21.0
-      script: mix format --check-formatted
+      script:
+        - set +e
+        - mix format --check-formatted
+        - mix credo --strict
+        - set -e
