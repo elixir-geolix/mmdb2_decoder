@@ -25,7 +25,5 @@ jobs:
       elixir: 1.7.3
       otp_release: 21.0
       script:
-        - set +e
         - mix format --check-formatted
         - mix credo --strict
-        - set -e
