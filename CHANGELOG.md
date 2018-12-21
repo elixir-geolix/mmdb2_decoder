@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.4.0-dev
+## v0.4.0 (2018-12-21)
 
 - Enhancements
     - Database parsing speed has been improved
