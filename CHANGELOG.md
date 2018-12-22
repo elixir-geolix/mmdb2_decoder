@@ -4,7 +4,7 @@
 
 - Enhancements
     - Database parsing speed has been improved
-    - Trying to locate a node below the available node count will no return `{:error, :node_below_count}` instead of an improper `0`
+    - Trying to locate a node below the available node count will now return `{:error, :node_below_count}` instead of an improper `0`
 
 ## v0.3.0 (2018-07-13)
 
