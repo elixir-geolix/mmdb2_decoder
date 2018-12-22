@@ -105,7 +105,7 @@ defmodule MMDB2Decoder do
       ...> |> MMDB2Decoder.pipe_lookup({127, 0, 0, 1})
       %{...}
   """
-  @spec pipe_lookup(parse_result, :inet.ip_address()) :: lookup_result | {:error, term}
+  @spec pipe_lookup(parse_result, :inet.ip_address()) :: lookup_result
   def pipe_lookup({:error, _} = error, _), do: error
   def pipe_lookup({meta, tree, data}, ip), do: lookup(ip, meta, tree, data)
 end
