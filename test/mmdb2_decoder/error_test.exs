@@ -4,7 +4,7 @@ defmodule MMDB2Decoder.ErrorTest do
   alias MMDB2Decoder.TestHelpers.Fixture
 
   test "broken pointers" do
-    assert nil ==
+    assert {:ok, nil} ==
              :fixture_broken_pointers
              |> Fixture.contents()
              |> MMDB2Decoder.parse_database()
@@ -12,7 +12,7 @@ defmodule MMDB2Decoder.ErrorTest do
   end
 
   test "no ipv4 search tree" do
-    assert nil ==
+    assert {:ok, nil} ==
              :fixture_no_ipv4_search_tree
              |> Fixture.contents()
              |> MMDB2Decoder.parse_database()

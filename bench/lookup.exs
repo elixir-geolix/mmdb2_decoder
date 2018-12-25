@@ -25,7 +25,7 @@ defmodule MMDB2Decoder.Benchmark.Lookup do
   end
 
   defp run_benchmark(database) do
-    {meta, tree, data} =
+    {:ok, meta, tree, data} =
       database
       |> File.read!()
       |> MMDB2Decoder.parse_database()

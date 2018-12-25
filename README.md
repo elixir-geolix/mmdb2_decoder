@@ -36,7 +36,7 @@ For more detailed examples and usage information please refer to the inline docu
 
 ```elixir
 database = File.read!("/path/to/database.mmdb")
-{meta, tree, data} = MMDB2Decoder.parse_database(database)
+{:ok, meta, tree, data} = MMDB2Decoder.parse_database(database)
 
 {:ok, ip} = :inet.parse_address(String.to_charlist("8.8.8.8"))
 

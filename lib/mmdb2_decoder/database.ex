@@ -10,11 +10,11 @@ defmodule MMDB2Decoder.Database do
   @doc """
   Looks up a pointer in a database.
   """
-  @spec lookup_pointer(non_neg_integer, binary, Metadata.t()) :: term
-  def lookup_pointer(0, _, _), do: nil
+  @spec lookup_pointer(non_neg_integer, binary, Metadata.t()) :: {:ok, term}
+  def lookup_pointer(0, _, _), do: {:ok, nil}
 
   def lookup_pointer(ptr, data, %{node_count: node_count}) do
-    Data.value(data, ptr - node_count - 16)
+    {:ok, Data.value(data, ptr - node_count - 16)}
   end
 
   @doc """
@@ -34,7 +34,7 @@ defmodule MMDB2Decoder.Database do
   @doc """
   Splits the data part according to a metadata definition.
   """
-  @spec split_data(binary, binary) :: {Metadata.t(), binary, binary}
+  @spec split_data(binary, binary) :: {:ok, Metadata.t(), binary, binary}
   def split_data(meta, data) do
     meta = Data.value(meta, 0)
     meta = struct(%Metadata{}, meta)
@@ -51,6 +51,6 @@ defmodule MMDB2Decoder.Database do
     data_size = byte_size(data) - byte_size(tree) - 16
     data = binary_part(data, tree_size + 16, data_size)
 
-    {meta, tree, data}
+    {:ok, meta, tree, data}
   end
 end

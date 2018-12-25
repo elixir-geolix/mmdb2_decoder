@@ -8,14 +8,14 @@ defmodule MMDB2Decoder do
   and hold the result available for later usage:
 
       iex(1)> database = File.read!("/path/to/database.mmdb")
-      iex(2)> {meta, tree, data} = MMDB2Decoder.parse_database(database)
+      iex(2)> {:ok, meta, tree, data} = MMDB2Decoder.parse_database(database)
 
   Using the returned database contents you can start looking up
   individual entries:
 
       iex(3)> {:ok, ip} = :inet.parse(String.to_charlist("127.0.0.1"))
       iex(4)> MMDB2Decoder.lookup(ip, meta, tree, data)
-      %{...}
+      {:ok, %{...}}
 
   For more details on the lookup methods (and a function suitable for
   direct piping) please see the individual function documentations.
@@ -33,8 +33,8 @@ defmodule MMDB2Decoder do
   alias MMDB2Decoder.LookupTree
   alias MMDB2Decoder.Metadata
 
-  @type lookup_result :: term | {:error, term}
-  @type parse_result :: {Metadata.t(), binary, binary} | {:error, term}
+  @type lookup_result :: {:ok, term} | {:error, term}
+  @type parse_result :: {:ok, Metadata.t(), binary, binary} | {:error, term}
 
   @doc """
   Looks up the data associated with an IP tuple.
@@ -46,10 +46,13 @@ defmodule MMDB2Decoder do
   ## Usage
 
       iex> MMDB2Decoder.lookup({127, 0, 0, 1}, meta, tree, data)
-      %{
-        continent: %{...},
-        country: %{...},
-        registered_country: %{...}
+      {
+        :ok,
+        %{
+          continent: %{...},
+          country: %{...},
+          registered_country: %{...}
+        }
       }
 
   The values for `meta`, `tree` and `data` can be obtained by
@@ -59,7 +62,7 @@ defmodule MMDB2Decoder do
   def lookup(ip, meta, tree, data) do
     case LookupTree.locate(ip, meta, tree) do
       {:error, _} = error -> error
-      pointer -> Database.lookup_pointer(pointer, data, meta)
+      {:ok, pointer} -> Database.lookup_pointer(pointer, data, meta)
     end
   end
 
@@ -73,6 +76,7 @@ defmodule MMDB2Decoder do
 
       iex> MMDB2Decoder.parse_database(File.read!("/path/to/database.mmdb"))
       {
+        :ok,
         %MMDB2Decoder.Metadata{...},
         <<...>>,
         <<...>>
@@ -103,9 +107,9 @@ defmodule MMDB2Decoder do
       ...> |> File.read!()
       ...> |> MMDB2Decoder.parse_database()
       ...> |> MMDB2Decoder.pipe_lookup({127, 0, 0, 1})
-      %{...}
+      {:ok, %{...}}
   """
   @spec pipe_lookup(parse_result, :inet.ip_address()) :: lookup_result
   def pipe_lookup({:error, _} = error, _), do: error
-  def pipe_lookup({meta, tree, data}, ip), do: lookup(ip, meta, tree, data)
+  def pipe_lookup({:ok, meta, tree, data}, ip), do: lookup(ip, meta, tree, data)
 end

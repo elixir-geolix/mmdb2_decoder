@@ -2,6 +2,9 @@
 
 ## v1.0.0-dev
 
+- Enhancements
+    - All public functions are now always returning either `{:ok, term}` or `{:error, term}`
+
 - Backwards incompatible changes
     - Minimum required elixir version is now `~> 1.5`
 
