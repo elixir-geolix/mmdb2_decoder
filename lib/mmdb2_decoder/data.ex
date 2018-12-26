@@ -88,8 +88,12 @@ defmodule MMDB2Decoder.Data do
     decode_array(part_rest, data_full, len, [])
   end
 
-  def decode(<<@extended::size(3), value::size(5), @extended_bool, part_rest::binary>>, _) do
-    {1 == value, part_rest}
+  def decode(<<@extended::size(3), 0::size(5), @extended_bool, part_rest::binary>>, _) do
+    {false, part_rest}
+  end
+
+  def decode(<<@extended::size(3), 1::size(5), @extended_bool, part_rest::binary>>, _) do
+    {true, part_rest}
   end
 
   def decode(<<@extended::size(3), _::size(5), @extended_cache, part_rest::binary>>, _) do
