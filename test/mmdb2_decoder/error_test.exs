@@ -3,6 +3,12 @@ defmodule MMDB2Decoder.ErrorTest do
 
   alias MMDB2Decoder.TestHelpers.Fixture
 
+  test "error result for pipe_lookup!/2" do
+    assert_raise RuntimeError, "parse error", fn ->
+      MMDB2Decoder.pipe_lookup!({:error, "parse error"}, :ignored)
+    end
+  end
+
   test "broken pointers" do
     assert {:ok, nil} ==
              :fixture_broken_pointers

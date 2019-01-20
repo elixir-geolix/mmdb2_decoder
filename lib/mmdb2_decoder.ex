@@ -67,6 +67,17 @@ defmodule MMDB2Decoder do
   end
 
   @doc """
+  Calls `lookup/4` and raises if an error occurs.
+  """
+  @spec lookup!(:inet.ip_address(), Metadata.t(), binary, binary) :: term | no_return
+  def lookup!(ip, meta, tree, data) do
+    case lookup(ip, meta, tree, data) do
+      {:ok, result} -> result
+      {:error, error} -> raise error
+    end
+  end
+
+  @doc """
   Parses a database binary and splits it into metadata, lookup tree and data.
 
   It is expected that you pass the real contents of the file, not the name
@@ -112,4 +123,12 @@ defmodule MMDB2Decoder do
   @spec pipe_lookup(parse_result, :inet.ip_address()) :: lookup_result
   def pipe_lookup({:error, _} = error, _), do: error
   def pipe_lookup({:ok, meta, tree, data}, ip), do: lookup(ip, meta, tree, data)
+
+  @doc """
+  Calls `pipe_lookup/2` and raises if an error from `parse_database/1` is given
+  or occurs during `lookup/4`.
+  """
+  @spec pipe_lookup!(parse_result, :inet.ip_address()) :: term | no_return
+  def pipe_lookup!({:error, error}, _ip), do: raise(error)
+  def pipe_lookup!({:ok, meta, tree, data}, ip), do: lookup!(ip, meta, tree, data)
 end
