@@ -1,8 +1,6 @@
 defmodule MMDB2Decoder.Data do
   @moduledoc false
 
-  @type decoded :: :cache | :end | binary | boolean | list | map | number
-
   # standard data types
   @binary 2
   @bytes 4
@@ -26,7 +24,7 @@ defmodule MMDB2Decoder.Data do
   @doc """
   Decodes the datatype found at the given offset of the data.
   """
-  @spec decode(binary, binary) :: {decoded, binary}
+  @spec decode(binary, binary) :: {MMDB2Decoder.decoded_value(), binary}
   def decode(<<@binary::size(3), 29::size(5), len::size(8), part_rest::binary>>, _) do
     decode_binary(part_rest, 29 + len)
   end
@@ -172,7 +170,7 @@ defmodule MMDB2Decoder.Data do
   @doc """
   Decodes the node at the given offset.
   """
-  @spec value(binary, non_neg_integer) :: decoded | nil
+  @spec value(binary, non_neg_integer) :: MMDB2Decoder.decoded_value() | nil
   def value(data, offset) when byte_size(data) > offset do
     <<_::size(offset)-binary, rest::binary>> = data
 
