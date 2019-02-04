@@ -12,6 +12,7 @@ defmodule MMDB2Decoder.Mixfile do
       aliases: aliases(),
       deps: deps(),
       description: "MMDB2 File Format Decoder",
+      dialyzer: dialyzer(),
       docs: docs(),
       elixirc_paths: elixirc_paths(Mix.env()),
       package: package(),
@@ -44,6 +45,17 @@ defmodule MMDB2Decoder.Mixfile do
       {:excoveralls, "~> 0.10", only: :test, runtime: false},
       {:geolix_testdata, "~> 0.3.0", only: :bench, runtime: false},
       {:hackney, "~> 1.0", only: :test, runtime: false}
+    ]
+  end
+
+  defp dialyzer do
+    [
+      flags: [
+        :error_handling,
+        :race_conditions,
+        :underspecs,
+        :unmatched_returns
+      ]
     ]
   end
 
