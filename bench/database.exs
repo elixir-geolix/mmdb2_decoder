@@ -1,5 +1,5 @@
 defmodule MMDB2Decoder.Benchmark.Database do
-  def run() do
+  def run do
     database = determine_database()
 
     case File.exists?(database) do
@@ -12,7 +12,7 @@ defmodule MMDB2Decoder.Benchmark.Database do
     end
   end
 
-  defp determine_database() do
+  defp determine_database do
     case System.argv() do
       [] ->
         [Geolix.TestData.dir(:mmdb2), "Benchmark.mmdb"]
