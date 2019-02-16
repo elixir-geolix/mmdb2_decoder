@@ -1,6 +1,6 @@
 # Changelog
 
-## v1.0.0-dev
+## v1.0.0 (2019-02-16)
 
 - Enhancements
     - All public lookup functions are now always returning either `{:ok, term}` or `{:error, term}`. Both `lookup!/4` and `pipe_lookup!/2` are available to get only the lookup result or raise in case of an error
