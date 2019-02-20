@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.1.0-dev
+
+- Deprecations
+    - The function `MMDB2Decoder.Data.value/2` is no longer documented as it should not be called directly. It will be made fully private in the next major release
+
 ## v1.0.0 (2019-02-16)
 
 - Enhancements

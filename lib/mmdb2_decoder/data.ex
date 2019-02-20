@@ -21,9 +21,7 @@ defmodule MMDB2Decoder.Data do
   @extended_unsigned_64 2
   @extended_unsigned_128 3
 
-  @doc """
-  Decodes the datatype found at the given offset of the data.
-  """
+  @doc false
   @spec decode(binary, binary) :: {MMDB2Decoder.decoded_value(), binary}
   def decode(<<@binary::size(3), 29::size(5), len::size(8), part_rest::binary>>, _) do
     decode_binary(part_rest, 29 + len)
