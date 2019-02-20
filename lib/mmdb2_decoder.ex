@@ -130,6 +130,6 @@ defmodule MMDB2Decoder do
   or occurs during `lookup/4`.
   """
   @spec pipe_lookup!(parse_result, :inet.ip_address()) :: decoded_value | no_return
-  def pipe_lookup!({:error, error}, _), do: raise error
+  def pipe_lookup!({:error, error}, _), do: raise(error)
   def pipe_lookup!({:ok, meta, tree, data}, ip), do: lookup!(ip, meta, tree, data)
 end
