@@ -10,11 +10,11 @@ defmodule MMDB2Decoder.Database do
   @doc """
   Looks up a pointer in a database.
   """
-  @spec lookup_pointer(non_neg_integer, binary, Metadata.t()) :: {:ok, term}
-  def lookup_pointer(0, _, _), do: {:ok, nil}
+  @spec lookup_pointer(non_neg_integer, binary, Metadata.t(), Keyword.t()) :: {:ok, term}
+  def lookup_pointer(0, _, _, _), do: {:ok, nil}
 
-  def lookup_pointer(ptr, data, %{node_count: node_count}) do
-    {:ok, Data.value(data, ptr - node_count - 16)}
+  def lookup_pointer(ptr, data, %{node_count: node_count}, options) do
+    {:ok, Data.value(data, ptr - node_count - 16, options)}
   end
 
   @doc """
@@ -36,7 +36,7 @@ defmodule MMDB2Decoder.Database do
   """
   @spec split_data(binary, binary) :: {:ok, Metadata.t(), binary, binary}
   def split_data(meta, data) do
-    meta = Data.value(meta, 0)
+    meta = Data.value(meta, 0, [])
     meta = struct(%Metadata{}, meta)
 
     %{node_count: node_count, record_size: record_size} = meta

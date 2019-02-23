@@ -33,9 +33,13 @@ defmodule MMDB2Decoder do
   alias MMDB2Decoder.LookupTree
   alias MMDB2Decoder.Metadata
 
+  @type decode_option :: term
+  @type decode_options :: [decode_option]
   @type decoded_value :: :cache | :end | binary | boolean | list | map | number
   @type lookup_result :: {:ok, decoded_value} | {:error, term}
   @type parse_result :: {:ok, Metadata.t(), binary, binary} | {:error, term}
+
+  @default_options []
 
   @doc """
   Looks up the data associated with an IP tuple.
@@ -59,20 +63,23 @@ defmodule MMDB2Decoder do
   The values for `meta`, `tree` and `data` can be obtained by
   parsing the file contents of a database using `parse_database/1`.
   """
-  @spec lookup(:inet.ip_address(), Metadata.t(), binary, binary) :: lookup_result
-  def lookup(ip, meta, tree, data) do
+  @spec lookup(:inet.ip_address(), Metadata.t(), binary, binary, decode_options) :: lookup_result
+  def lookup(ip, meta, tree, data, options \\ []) do
+    options = Keyword.merge(@default_options, options)
+
     case LookupTree.locate(ip, meta, tree) do
       {:error, _} = error -> error
-      {:ok, pointer} -> Database.lookup_pointer(pointer, data, meta)
+      {:ok, pointer} -> Database.lookup_pointer(pointer, data, meta, options)
     end
   end
 
   @doc """
   Calls `lookup/4` and raises if an error occurs.
   """
-  @spec lookup!(:inet.ip_address(), Metadata.t(), binary, binary) :: decoded_value | no_return
-  def lookup!(ip, meta, tree, data) do
-    case lookup(ip, meta, tree, data) do
+  @spec lookup!(:inet.ip_address(), Metadata.t(), binary, binary, decode_options) ::
+          decoded_value | no_return
+  def lookup!(ip, meta, tree, data, options \\ []) do
+    case lookup(ip, meta, tree, data, options) do
       {:ok, result} -> result
       {:error, error} -> raise error
     end
@@ -121,15 +128,24 @@ defmodule MMDB2Decoder do
       ...> |> MMDB2Decoder.pipe_lookup({127, 0, 0, 1})
       {:ok, %{...}}
   """
-  @spec pipe_lookup(parse_result, :inet.ip_address()) :: lookup_result
-  def pipe_lookup({:error, _} = error, _), do: error
-  def pipe_lookup({:ok, meta, tree, data}, ip), do: lookup(ip, meta, tree, data)
+  @spec pipe_lookup(parse_result, :inet.ip_address(), decode_options) :: lookup_result
+  def pipe_lookup(parse_result, ip, options \\ [])
+
+  def pipe_lookup({:error, _} = error, _, _), do: error
+
+  def pipe_lookup({:ok, meta, tree, data}, ip, options),
+    do: lookup(ip, meta, tree, data, options)
 
   @doc """
   Calls `pipe_lookup/2` and raises if an error from `parse_database/1` is given
   or occurs during `lookup/4`.
   """
-  @spec pipe_lookup!(parse_result, :inet.ip_address()) :: decoded_value | no_return
-  def pipe_lookup!({:error, error}, _), do: raise(error)
-  def pipe_lookup!({:ok, meta, tree, data}, ip), do: lookup!(ip, meta, tree, data)
+  @spec pipe_lookup!(parse_result, :inet.ip_address(), decode_options) ::
+          decoded_value | no_return
+  def pipe_lookup!(parse_result, ip, options \\ [])
+
+  def pipe_lookup!({:error, error}, _, _), do: raise(error)
+
+  def pipe_lookup!({:ok, meta, tree, data}, ip, options),
+    do: lookup!(ip, meta, tree, data, options)
 end
