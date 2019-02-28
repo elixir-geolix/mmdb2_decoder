@@ -143,7 +143,10 @@ defmodule MMDB2Decoder.DataTest do
   end
 
   test "decoded values with non-default options" do
-    options = [float_precision: 0]
+    options = [
+      double_precision: 0,
+      float_precision: 0
+    ]
 
     {:ok, decoded} =
       :fixture_decoder
@@ -151,11 +154,15 @@ defmodule MMDB2Decoder.DataTest do
       |> MMDB2Decoder.parse_database()
       |> MMDB2Decoder.pipe_lookup({1, 1, 1, 0}, options)
 
+    assert decoded[:double] == 42
     assert decoded[:float] == 1
   end
 
   test "decoded values with upcoming default options" do
-    options = [float_precision: nil]
+    options = [
+      double_precision: nil,
+      float_precision: nil
+    ]
 
     {:ok, decoded} =
       :fixture_decoder
@@ -163,6 +170,7 @@ defmodule MMDB2Decoder.DataTest do
       |> MMDB2Decoder.parse_database()
       |> MMDB2Decoder.pipe_lookup({1, 1, 1, 0}, options)
 
+    assert decoded[:double] == 42.123456
     assert decoded[:float] == 1.100000023841858
   end
 

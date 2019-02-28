@@ -56,8 +56,16 @@ defmodule MMDB2Decoder.Data do
     decode_binary(part_rest, len)
   end
 
-  def decode(<<@double::size(3), 8::size(5), value::size(64)-float, part_rest::binary>>, _, _) do
-    {Float.round(value, 8), part_rest}
+  def decode(
+        <<@double::size(3), 8::size(5), value::size(64)-float, part_rest::binary>>,
+        _,
+        options
+      ) do
+    if options[:double_precision] do
+      {Float.round(value, options[:double_precision]), part_rest}
+    else
+      {value, part_rest}
+    end
   end
 
   def decode(

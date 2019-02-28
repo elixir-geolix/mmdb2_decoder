@@ -3,6 +3,9 @@
 ## v1.1.0-dev
 
 - Enhancements
+    - Precision for `:double` data can be defined by passing `:double_precision` in the options of `lookup/5`
+        - default is `8` (keeping current behaviour)
+        - `nil` will deactivate rounding (future default)
     - Precision for `:float` data can be defined by passing `:float_precision` in the options of `lookup/5`
         - default is `4` (keeping current behaviour)
         - `nil` will deactivate rounding (future default)

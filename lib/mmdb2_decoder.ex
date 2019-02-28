@@ -33,14 +33,16 @@ defmodule MMDB2Decoder do
   alias MMDB2Decoder.LookupTree
   alias MMDB2Decoder.Metadata
 
-  @type decode_option :: {:float_precision, Float.precision_range()}
+  @type decode_option ::
+          {:double_precision, Float.precision_range()}
+          | {:float_precision, Float.precision_range()}
   @type decode_options :: [decode_option]
   @type decoded_value :: :cache | :end | binary | boolean | list | map | number
   @type lookup_result :: {:ok, decoded_value} | {:error, term}
   @type parse_result :: {:ok, Metadata.t(), binary, binary} | {:error, term}
 
   @doc false
-  def default_options, do: [float_precision: 4]
+  def default_options, do: [double_precision: 8, float_precision: 4]
 
   @doc """
   Looks up the data associated with an IP tuple.
