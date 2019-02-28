@@ -36,13 +36,14 @@ defmodule MMDB2Decoder do
   @type decode_option ::
           {:double_precision, Float.precision_range()}
           | {:float_precision, Float.precision_range()}
+          | {:map_keys, :atoms | :atoms! | :strings}
   @type decode_options :: [decode_option]
   @type decoded_value :: :cache | :end | binary | boolean | list | map | number
   @type lookup_result :: {:ok, decoded_value} | {:error, term}
   @type parse_result :: {:ok, Metadata.t(), binary, binary} | {:error, term}
 
   @doc false
-  def default_options, do: [double_precision: 8, float_precision: 4]
+  def default_options, do: [double_precision: 8, float_precision: 4, map_keys: :atoms]
 
   @doc """
   Looks up the data associated with an IP tuple.

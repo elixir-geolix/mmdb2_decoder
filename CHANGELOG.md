@@ -3,6 +3,10 @@
 ## v1.1.0-dev
 
 - Enhancements
+    - Maps can be decoded with a custom key type by passing `:map_keys` in the options of `lookup/5`
+        - default is `:atoms` (keeping current behaviour, uses `String.to_atom/1`)
+        - `:atoms!` uses `String.to_existing_atom/1`
+        - `:strings` to perform no conversion (future default)
     - Precision for `:double` data can be defined by passing `:double_precision` in the options of `lookup/5`
         - default is `8` (keeping current behaviour)
         - `nil` will deactivate rounding (future default)

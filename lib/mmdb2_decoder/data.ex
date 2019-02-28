@@ -247,7 +247,14 @@ defmodule MMDB2Decoder.Data do
     {key, part_rest} = decode(data_part, data_full, options)
     {value, dec_rest} = decode(part_rest, data_full, options)
 
-    decode_map(dec_rest, data_full, size - 1, [{String.to_atom(key), value} | acc], options)
+    key =
+      case options[:map_keys] do
+        :atoms -> String.to_atom(key)
+        :atoms! -> String.to_existing_atom(key)
+        :strings -> key
+      end
+
+    decode_map(dec_rest, data_full, size - 1, [{key, value} | acc], options)
   end
 
   defp decode_signed(data_part, bitlen) do

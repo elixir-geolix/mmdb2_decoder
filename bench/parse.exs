@@ -61,11 +61,17 @@ defmodule MMDB2Decoder.Benchmark.Parse do
         "Parsing: Binary (84000 character)" => fn ->
           MMDB2Decoder.lookup(parse_binary_84000, meta, tree, data)
         end,
-        "Parsing: Map (nested 1 level)" => fn ->
-          MMDB2Decoder.lookup(parse_map_1, meta, tree, data)
+        "Parsing: Map (nested 1 level, map_keys: :atoms)" => fn ->
+          MMDB2Decoder.lookup(parse_map_1, meta, tree, data, map_keys: :atoms)
         end,
-        "Parsing: Map (nested 10 levels)" => fn ->
-          MMDB2Decoder.lookup(parse_map_10, meta, tree, data)
+        "Parsing: Map (nested 1 level, map_keys: :strings)" => fn ->
+          MMDB2Decoder.lookup(parse_map_1, meta, tree, data, map_keys: :strings)
+        end,
+        "Parsing: Map (nested 10 levels, map_keys: :atoms)" => fn ->
+          MMDB2Decoder.lookup(parse_map_10, meta, tree, data, map_keys: :atoms)
+        end,
+        "Parsing: Map (nested 10 levels, map_keys: :strings)" => fn ->
+          MMDB2Decoder.lookup(parse_map_10, meta, tree, data, map_keys: :strings)
         end
       },
       formatter_options: %{console: %{comparison: false}},

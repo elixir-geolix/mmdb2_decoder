@@ -145,7 +145,8 @@ defmodule MMDB2Decoder.DataTest do
   test "decoded values with non-default options" do
     options = [
       double_precision: 0,
-      float_precision: 0
+      float_precision: 0,
+      map_keys: :atoms!
     ]
 
     {:ok, decoded} =
@@ -156,12 +157,14 @@ defmodule MMDB2Decoder.DataTest do
 
     assert decoded[:double] == 42
     assert decoded[:float] == 1
+    assert decoded[:map] == %{mapX: %{arrayX: [7, 8, 9], utf8_stringX: "hello"}}
   end
 
   test "decoded values with upcoming default options" do
     options = [
       double_precision: nil,
-      float_precision: nil
+      float_precision: nil,
+      map_keys: :strings
     ]
 
     {:ok, decoded} =
@@ -170,8 +173,11 @@ defmodule MMDB2Decoder.DataTest do
       |> MMDB2Decoder.parse_database()
       |> MMDB2Decoder.pipe_lookup({1, 1, 1, 0}, options)
 
-    assert decoded[:double] == 42.123456
-    assert decoded[:float] == 1.100000023841858
+    assert %{
+             "double" => 42.123456,
+             "float" => 1.100000023841858,
+             "map" => %{"mapX" => %{"arrayX" => [7, 8, 9], "utf8_stringX" => "hello"}}
+           } = decoded
   end
 
   test "lookup!/4 equals lookup/4" do
