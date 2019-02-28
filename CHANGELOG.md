@@ -2,6 +2,11 @@
 
 ## v1.1.0-dev
 
+- Enhancements
+    - Precision for `:float` data can be defined by passing `:float_precision` in the options of `lookup/5`
+        - default is `4` (keeping current behaviour)
+        - `nil` will deactivate rounding (future default)
+
 - Deprecations
     - The function `MMDB2Decoder.Data.value/2` is no longer documented as it should not be called directly. It will be made fully private in the next major release
 

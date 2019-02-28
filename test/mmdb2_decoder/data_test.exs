@@ -142,6 +142,30 @@ defmodule MMDB2Decoder.DataTest do
     assert decoded[:float] == 1.1
   end
 
+  test "decoded values with non-default options" do
+    options = [float_precision: 0]
+
+    {:ok, decoded} =
+      :fixture_decoder
+      |> Fixture.contents()
+      |> MMDB2Decoder.parse_database()
+      |> MMDB2Decoder.pipe_lookup({1, 1, 1, 0}, options)
+
+    assert decoded[:float] == 1
+  end
+
+  test "decoded values with upcoming default options" do
+    options = [float_precision: nil]
+
+    {:ok, decoded} =
+      :fixture_decoder
+      |> Fixture.contents()
+      |> MMDB2Decoder.parse_database()
+      |> MMDB2Decoder.pipe_lookup({1, 1, 1, 0}, options)
+
+    assert decoded[:float] == 1.100000023841858
+  end
+
   test "lookup!/4 equals lookup/4" do
     {:ok, meta, tree, data} =
       :fixture_ipv4_24

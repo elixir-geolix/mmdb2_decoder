@@ -36,7 +36,7 @@ defmodule MMDB2Decoder.Database do
   """
   @spec split_data(binary, binary) :: {:ok, Metadata.t(), binary, binary}
   def split_data(meta, data) do
-    meta = Data.value(meta, 0, [])
+    meta = Data.value(meta, 0, MMDB2Decoder.default_options())
     meta = struct(%Metadata{}, meta)
 
     %{node_count: node_count, record_size: record_size} = meta
