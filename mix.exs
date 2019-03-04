@@ -43,7 +43,7 @@ defmodule MMDB2Decoder.Mixfile do
       {:dialyxir, "~> 1.0.0-rc", only: :dev, runtime: false},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
       {:excoveralls, "~> 0.10", only: :test, runtime: false},
-      {:geolix_testdata, "~> 0.3.0", only: :bench, runtime: false},
+      {:geolix_testdata, "~> 0.4.0", only: :bench, runtime: false},
       {:hackney, "~> 1.0", only: :test, runtime: false}
     ]
   end
