@@ -1,2 +1,2 @@
-MMDB2Decoder.TestHelpers.FixtureDownload.run()
+MMDB2Decoder.TestHelpers.Fixture.download()
 ExUnit.start()
