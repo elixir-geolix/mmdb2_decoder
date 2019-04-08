@@ -33,7 +33,7 @@ defmodule MMDB2Decoder.Benchmark.Database do
           MMDB2Decoder.parse_database(content)
         end
       },
-      formatter_options: %{console: %{comparison: false}},
+      formatters: [{Benchee.Formatters.Console, comparison: false}],
       warmup: 2,
       time: 10
     )

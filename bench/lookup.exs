@@ -42,7 +42,7 @@ defmodule MMDB2Decoder.Benchmark.Lookup do
           MMDB2Decoder.lookup(lookup_ipv4_in_ipv6, meta, tree, data)
         end
       },
-      formatter_options: %{console: %{comparison: false}},
+      formatters: [{Benchee.Formatters.Console, comparison: false}],
       warmup: 2,
       time: 10
     )

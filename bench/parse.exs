@@ -74,7 +74,7 @@ defmodule MMDB2Decoder.Benchmark.Parse do
           MMDB2Decoder.lookup(parse_map_10, meta, tree, data, map_keys: :strings)
         end
       },
-      formatter_options: %{console: %{comparison: false}},
+      formatters: [{Benchee.Formatters.Console, comparison: false}],
       warmup: 2,
       time: 10
     )
