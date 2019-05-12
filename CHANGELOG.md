@@ -14,6 +14,9 @@
         - default is `4` (keeping current behaviour)
         - `nil` will deactivate rounding (future default)
 
+- Bug fixes
+    - Max values for `:double` and `:float` datatypes (magic `'Inf'` string in Perl) should now properly decode
+
 - Deprecations
     - The function `MMDB2Decoder.Data.value/2` is no longer documented as it should not be called directly. It will be made fully private in the next major release
 

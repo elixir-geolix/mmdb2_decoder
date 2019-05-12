@@ -61,11 +61,15 @@ defmodule MMDB2Decoder.Data do
         _,
         options
       ) do
-    if options[:double_precision] do
-      {Float.round(value, options[:double_precision]), part_rest}
-    else
-      {value, part_rest}
-    end
+    {maybe_round_float(value, options[:double_precision]), part_rest}
+  end
+
+  def decode(
+        <<@double::size(3), 8::size(5), value::size(64), part_rest::binary>>,
+        _,
+        options
+      ) do
+    {maybe_round_float(:erlang.float(value), options[:double_precision]), part_rest}
   end
 
   def decode(
@@ -127,11 +131,21 @@ defmodule MMDB2Decoder.Data do
         _,
         options
       ) do
-    if options[:float_precision] do
-      {Float.round(value, options[:float_precision]), part_rest}
-    else
-      {value, part_rest}
-    end
+    {maybe_round_float(value, options[:float_precision]), part_rest}
+  end
+
+  def decode(
+        <<
+          @extended::size(3),
+          4::size(5),
+          @extended_float,
+          value::size(32),
+          part_rest::binary
+        >>,
+        _,
+        options
+      ) do
+    {maybe_round_float(:erlang.float(value), options[:float_precision]), part_rest}
   end
 
   def decode(<<@extended::size(3), len::size(5), @extended_signed_32, part_rest::binary>>, _, _) do
@@ -268,4 +282,7 @@ defmodule MMDB2Decoder.Data do
 
     {value, rest}
   end
+
+  defp maybe_round_float(value, nil), do: value
+  defp maybe_round_float(value, precision), do: Float.round(value, precision)
 end

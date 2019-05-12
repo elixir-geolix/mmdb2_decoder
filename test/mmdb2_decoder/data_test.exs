@@ -142,6 +142,23 @@ defmodule MMDB2Decoder.DataTest do
     assert decoded[:float] == 1.1
   end
 
+  test "decoded MAX values" do
+    {:ok, decoded} =
+      :fixture_decoder
+      |> Fixture.contents()
+      |> MMDB2Decoder.parse_database()
+      |> MMDB2Decoder.pipe_lookup({255, 255, 255, 255})
+
+    # credo:disable-for-next-line Credo.Check.Readability.LargeNumbers
+    assert decoded[:double] == 9.218868437227405e18
+    assert decoded[:float] == 2_139_095_040.0
+    assert decoded[:int32] == 2_147_483_647
+    assert decoded[:uint16] == 65_535
+    assert decoded[:uint32] == 4_294_967_295
+    assert decoded[:uint64] == 18_446_744_073_709_551_615
+    assert decoded[:uint128] == 340_282_366_920_938_463_463_374_607_431_768_211_455
+  end
+
   test "decoded values with non-default options" do
     options = [
       double_precision: 0,
