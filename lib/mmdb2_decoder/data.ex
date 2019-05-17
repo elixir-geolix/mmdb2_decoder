@@ -24,6 +24,10 @@ defmodule MMDB2Decoder.Data do
   @doc false
   @spec decode(binary, binary, MMDB2Decoder.decode_options()) ::
           {MMDB2Decoder.decoded_value(), binary}
+  def decode(<<@binary::size(3), 0::size(5), part_rest::binary>>, _, _) do
+    {"", part_rest}
+  end
+
   def decode(<<@binary::size(3), 29::size(5), len::size(8), part_rest::binary>>, _, _) do
     decode_binary(part_rest, 29 + len)
   end
