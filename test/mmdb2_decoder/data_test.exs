@@ -159,6 +159,27 @@ defmodule MMDB2Decoder.DataTest do
     assert decoded[:uint128] == 340_282_366_920_938_463_463_374_607_431_768_211_455
   end
 
+  test "decoded MIN values" do
+    {:ok, decoded} =
+      :fixture_decoder
+      |> Fixture.contents()
+      |> MMDB2Decoder.parse_database()
+      |> MMDB2Decoder.pipe_lookup({0, 0, 0, 0})
+
+    assert decoded[:array] == []
+    assert decoded[:boolean] == false
+    assert decoded[:bytes] == ""
+    assert decoded[:double] == 0.0
+    assert decoded[:float] == 0.0
+    assert decoded[:int32] == 0
+    assert decoded[:map] == %{}
+    assert decoded[:uint16] == 0
+    assert decoded[:uint32] == 0
+    assert decoded[:uint64] == 0
+    assert decoded[:uint128] == 0
+    assert decoded[:utf8_string] == ""
+  end
+
   test "decoded values with non-default options" do
     options = [
       double_precision: 0,
