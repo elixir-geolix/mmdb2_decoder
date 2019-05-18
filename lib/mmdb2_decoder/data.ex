@@ -44,6 +44,10 @@ defmodule MMDB2Decoder.Data do
     decode_binary(part_rest, len)
   end
 
+  def decode(<<@bytes::size(3), 0::size(5), part_rest::binary>>, _, _) do
+    {"", part_rest}
+  end
+
   def decode(<<@bytes::size(3), 29::size(5), len::size(8), part_rest::binary>>, _, _) do
     decode_binary(part_rest, 29 + len)
   end
