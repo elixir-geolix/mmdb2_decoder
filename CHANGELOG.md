@@ -1,6 +1,6 @@
 # Changelog
 
-## v1.0.1-dev
+## v1.0.1 (2019-06-09)
 
 - Bug fixes
     - Encountering an invalid node count in a database will result in `{:error, :invalid_node_count}` being returned instead of raising an unexpected `ArgumentError`
