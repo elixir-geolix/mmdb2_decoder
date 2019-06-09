@@ -10,11 +10,13 @@ defmodule MMDB2Decoder.ErrorTest do
   end
 
   test "broken pointers" do
-    assert {:ok, nil} ==
-             :fixture_broken_pointers
-             |> Fixture.contents()
-             |> MMDB2Decoder.parse_database()
-             |> MMDB2Decoder.pipe_lookup({1, 1, 1, 32})
+    database =
+      :fixture_broken_pointers
+      |> Fixture.contents()
+      |> MMDB2Decoder.parse_database()
+
+    assert {:ok, nil} == MMDB2Decoder.pipe_lookup(database, {1, 1, 1, 16})
+    assert {:ok, nil} == MMDB2Decoder.pipe_lookup(database, {1, 1, 1, 32})
   end
 
   test "broken search tree" do
