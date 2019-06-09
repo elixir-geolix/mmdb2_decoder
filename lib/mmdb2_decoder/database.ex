@@ -24,7 +24,8 @@ defmodule MMDB2Decoder.Database do
   @doc """
   Splits the data part according to a metadata definition.
   """
-  @spec split_data(binary, binary) :: {:ok, Metadata.t(), binary, binary}
+  @spec split_data(binary, binary) ::
+          {:ok, Metadata.t(), binary, binary} | {:error, :invalid_node_count}
   def split_data(meta, data) do
     meta = Data.value(meta, 0)
     meta = struct(%Metadata{}, meta)
@@ -34,13 +35,17 @@ defmodule MMDB2Decoder.Database do
     node_byte_size = div(record_size, 4)
     tree_size = node_count * node_byte_size
 
-    meta = %{meta | node_byte_size: node_byte_size}
-    meta = %{meta | tree_size: tree_size}
+    if tree_size < byte_size(data) do
+      meta = %{meta | node_byte_size: node_byte_size}
+      meta = %{meta | tree_size: tree_size}
 
-    tree = binary_part(data, 0, tree_size)
-    data_size = byte_size(data) - byte_size(tree) - 16
-    data = binary_part(data, tree_size + 16, data_size)
+      tree = binary_part(data, 0, tree_size)
+      data_size = byte_size(data) - byte_size(tree) - 16
+      data = binary_part(data, tree_size + 16, data_size)
 
-    {:ok, meta, tree, data}
+      {:ok, meta, tree, data}
+    else
+      {:error, :invalid_node_count}
+    end
   end
 end

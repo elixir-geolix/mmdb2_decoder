@@ -27,6 +27,13 @@ defmodule MMDB2Decoder.ErrorTest do
              |> MMDB2Decoder.pipe_lookup({1, 1, 1, 0})
   end
 
+  test "invalid node count" do
+    assert {:error, :invalid_node_count} ==
+             :fixture_invalid_node_count
+             |> Fixture.contents()
+             |> MMDB2Decoder.parse_database()
+  end
+
   test "no ipv4 search tree" do
     assert {:ok, nil} ==
              :fixture_no_ipv4_search_tree

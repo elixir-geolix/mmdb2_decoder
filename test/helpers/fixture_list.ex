@@ -28,6 +28,11 @@ defmodule MMDB2Decoder.TestHelpers.FixtureList do
       "#{@baseurl}/MaxMind-DB-test-broken-search-tree-24.mmdb"
     },
     {
+      :fixture_invalid_node_count,
+      "GeoIP2-City-Test-Invalid-Node-Count.mmdb",
+      "#{@baseurl}/GeoIP2-City-Test-Invalid-Node-Count.mmdb"
+    },
+    {
       :fixture_no_ipv4_search_tree,
       "MaxMind-DB-no-ipv4-search-tree.mmdb",
       "#{@baseurl}/MaxMind-DB-no-ipv4-search-tree.mmdb"
