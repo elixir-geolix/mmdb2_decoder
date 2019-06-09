@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.0.1-dev
+
+- Bug fixes
+    - Return typespecs for `MMDB2Decoder.lookup/4` and dependent functions now include the possible `nil` return
+
 ## v1.0.0 (2019-02-16)
 
 - Enhancements
