@@ -23,6 +23,11 @@ defmodule MMDB2Decoder.TestHelpers.FixtureList do
       "#{@baseurl}/MaxMind-DB-test-broken-pointers-24.mmdb"
     },
     {
+      :fixture_broken_search_tree,
+      "MaxMind-DB-test-broken-search-tree-24.mmdb",
+      "#{@baseurl}/MaxMind-DB-test-broken-search-tree-24.mmdb"
+    },
+    {
       :fixture_no_ipv4_search_tree,
       "MaxMind-DB-no-ipv4-search-tree.mmdb",
       "#{@baseurl}/MaxMind-DB-no-ipv4-search-tree.mmdb"

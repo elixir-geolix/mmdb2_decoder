@@ -29,6 +29,7 @@ defmodule MMDB2Decoder do
   return values with a higher precision.
   """
 
+  alias MMDB2Decoder.Data
   alias MMDB2Decoder.Database
   alias MMDB2Decoder.LookupTree
   alias MMDB2Decoder.Metadata
@@ -65,7 +66,7 @@ defmodule MMDB2Decoder do
   def lookup(ip, meta, tree, data) do
     case LookupTree.locate(ip, meta, tree) do
       {:error, _} = error -> error
-      {:ok, pointer} -> Database.lookup_pointer(pointer, data, meta)
+      {:ok, pointer} -> {:ok, Data.value(data, pointer - meta.node_count - 16)}
     end
   end
 

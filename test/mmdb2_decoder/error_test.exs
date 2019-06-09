@@ -17,6 +17,14 @@ defmodule MMDB2Decoder.ErrorTest do
              |> MMDB2Decoder.pipe_lookup({1, 1, 1, 32})
   end
 
+  test "broken search tree" do
+    assert {:ok, nil} ==
+             :fixture_broken_search_tree
+             |> Fixture.contents()
+             |> MMDB2Decoder.parse_database()
+             |> MMDB2Decoder.pipe_lookup({1, 1, 1, 0})
+  end
+
   test "no ipv4 search tree" do
     assert {:ok, nil} ==
              :fixture_no_ipv4_search_tree
