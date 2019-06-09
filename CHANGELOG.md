@@ -20,6 +20,12 @@
 - Deprecations
     - The function `MMDB2Decoder.Data.value/2` is no longer documented as it should not be called directly. It will be made fully private in the next major release
 
+## v1.0.1 (2019-06-09)
+
+- Bug fixes
+    - Encountering an invalid node count in a database will result in `{:error, :invalid_node_count}` being returned instead of raising an unexpected `ArgumentError`
+    - Return typespecs for `MMDB2Decoder.lookup/4` and dependent functions now include the possible `nil` return
+
 ## v1.0.0 (2019-02-16)
 
 - Enhancements

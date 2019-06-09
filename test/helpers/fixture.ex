@@ -13,6 +13,8 @@ defmodule MMDB2Decoder.TestHelpers.Fixture do
     {:fixture_ipv6_28, "MaxMind-DB-test-ipv6-28.mmdb"},
     {:fixture_ipv6_32, "MaxMind-DB-test-ipv6-32.mmdb"},
     {:fixture_broken_pointers, "MaxMind-DB-test-broken-pointers-24.mmdb"},
+    {:fixture_broken_search_tree, "MaxMind-DB-test-broken-search-tree-24.mmdb"},
+    {:fixture_invalid_node_count, "GeoIP2-City-Test-Invalid-Node-Count.mmdb"},
     {:fixture_no_ipv4_search_tree, "MaxMind-DB-no-ipv4-search-tree.mmdb"}
   ]
 

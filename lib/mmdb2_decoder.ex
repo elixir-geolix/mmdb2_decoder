@@ -29,6 +29,7 @@ defmodule MMDB2Decoder do
   return values with a higher precision.
   """
 
+  alias MMDB2Decoder.Data
   alias MMDB2Decoder.Database
   alias MMDB2Decoder.LookupTree
   alias MMDB2Decoder.Metadata
@@ -39,7 +40,9 @@ defmodule MMDB2Decoder do
           | {:map_keys, :atoms | :atoms! | :strings}
   @type decode_options :: [decode_option]
   @type decoded_value :: :cache | :end | binary | boolean | list | map | number
-  @type lookup_result :: {:ok, decoded_value} | {:error, term}
+  @type lookup_value :: decoded_value | nil
+
+  @type lookup_result :: {:ok, lookup_value | nil} | {:error, term}
   @type parse_result :: {:ok, Metadata.t(), binary, binary} | {:error, term}
 
   @doc false
@@ -73,7 +76,7 @@ defmodule MMDB2Decoder do
 
     case LookupTree.locate(ip, meta, tree) do
       {:error, _} = error -> error
-      {:ok, pointer} -> Database.lookup_pointer(pointer, data, meta, options)
+      {:ok, pointer} -> {:ok, Data.value(data, pointer - meta.node_count - 16, options)}
     end
   end
 
@@ -81,7 +84,7 @@ defmodule MMDB2Decoder do
   Calls `lookup/4` and raises if an error occurs.
   """
   @spec lookup!(:inet.ip_address(), Metadata.t(), binary, binary, decode_options) ::
-          decoded_value | no_return
+          lookup_value | no_return
   def lookup!(ip, meta, tree, data, options \\ []) do
     case lookup(ip, meta, tree, data, options) do
       {:ok, result} -> result
@@ -144,8 +147,9 @@ defmodule MMDB2Decoder do
   Calls `pipe_lookup/2` and raises if an error from `parse_database/1` is given
   or occurs during `lookup/4`.
   """
+
   @spec pipe_lookup!(parse_result, :inet.ip_address(), decode_options) ::
-          decoded_value | no_return
+          lookup_value | no_return
   def pipe_lookup!(parse_result, ip, options \\ [])
 
   def pipe_lookup!({:error, error}, _, _), do: raise(error)

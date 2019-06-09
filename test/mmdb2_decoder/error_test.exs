@@ -10,11 +10,28 @@ defmodule MMDB2Decoder.ErrorTest do
   end
 
   test "broken pointers" do
+    database =
+      :fixture_broken_pointers
+      |> Fixture.contents()
+      |> MMDB2Decoder.parse_database()
+
+    assert {:ok, nil} == MMDB2Decoder.pipe_lookup(database, {1, 1, 1, 16})
+    assert {:ok, nil} == MMDB2Decoder.pipe_lookup(database, {1, 1, 1, 32})
+  end
+
+  test "broken search tree" do
     assert {:ok, nil} ==
-             :fixture_broken_pointers
+             :fixture_broken_search_tree
              |> Fixture.contents()
              |> MMDB2Decoder.parse_database()
-             |> MMDB2Decoder.pipe_lookup({1, 1, 1, 32})
+             |> MMDB2Decoder.pipe_lookup({1, 1, 1, 0})
+  end
+
+  test "invalid node count" do
+    assert {:error, :invalid_node_count} ==
+             :fixture_invalid_node_count
+             |> Fixture.contents()
+             |> MMDB2Decoder.parse_database()
   end
 
   test "no ipv4 search tree" do

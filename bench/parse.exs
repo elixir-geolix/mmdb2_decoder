@@ -52,13 +52,13 @@ defmodule MMDB2Decoder.Benchmark.Parse do
         "Parsing: Binary (1 character)" => fn ->
           MMDB2Decoder.lookup(parse_binary_1, meta, tree, data)
         end,
-        "Parsing: Binary (42 character)" => fn ->
+        "Parsing: Binary (42 characters)" => fn ->
           MMDB2Decoder.lookup(parse_binary_42, meta, tree, data)
         end,
-        "Parsing: Binary (420 character)" => fn ->
+        "Parsing: Binary (420 characters)" => fn ->
           MMDB2Decoder.lookup(parse_binary_420, meta, tree, data)
         end,
-        "Parsing: Binary (84000 character)" => fn ->
+        "Parsing: Binary (84000 characters)" => fn ->
           MMDB2Decoder.lookup(parse_binary_84000, meta, tree, data)
         end,
         "Parsing: Map (nested 1 level, map_keys: :atoms)" => fn ->

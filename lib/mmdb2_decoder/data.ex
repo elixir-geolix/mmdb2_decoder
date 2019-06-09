@@ -232,8 +232,8 @@ defmodule MMDB2Decoder.Data do
   Decodes the node at the given offset.
   """
   @spec value(binary, non_neg_integer, MMDB2Decoder.decode_options()) ::
-          MMDB2Decoder.decoded_value() | nil
-  def value(data, offset, options) when byte_size(data) > offset do
+          MMDB2Decoder.lookup_value()
+  def value(data, offset, options) when byte_size(data) > offset and offset >= 0 do
     <<_::size(offset)-binary, rest::binary>> = data
 
     {value, _rest} = decode(rest, data, options)
