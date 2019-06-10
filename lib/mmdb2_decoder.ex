@@ -42,7 +42,7 @@ defmodule MMDB2Decoder do
   @type decoded_value :: :cache | :end | binary | boolean | list | map | number
   @type lookup_value :: decoded_value | nil
 
-  @type lookup_result :: {:ok, lookup_value | nil} | {:error, term}
+  @type lookup_result :: {:ok, lookup_value} | {:error, term}
   @type parse_result :: {:ok, Metadata.t(), binary, binary} | {:error, term}
 
   @doc false
