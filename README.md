@@ -56,8 +56,6 @@ MMDB2Decoder.lookup(ip, meta, tree, data)
 
 Several (minimal) benchmark scripts are included. Please refer to the Mixfile or `mix help` output for their names.
 
-By default the benchmarks use the `Benchmark.mmdb` database provided by `:geolix_testdata`. To use a different database pass it's path as the sole argument to an individual `mix bench.*` call. Please be aware that not all benchmark scripts are expected to work without the default database.
-
 ## License
 
 [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
