@@ -1,6 +1,6 @@
 # Changelog
 
-## v1.1.0-dev
+## v1.1.0 (2019-07-06)
 
 - Enhancements
     - Maps can be decoded with a custom key type by passing `:map_keys` in the options of `lookup/5`
