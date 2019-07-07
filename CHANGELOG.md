@@ -3,6 +3,10 @@
 ## v2.0.0-dev
 
 - Backwards incompatible changes
+    - New decoding defaults are now active:
+        - `double_prevision: nil`
+        - `float_precision: nil`
+        - `map_keys: :strings`
     - `MMDB2Decoder.Data.decode/3` is now private
 
 ## v1.1.0 (2019-07-06)

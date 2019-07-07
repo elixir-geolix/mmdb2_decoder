@@ -46,7 +46,7 @@ defmodule MMDB2Decoder do
   @type parse_result :: {:ok, Metadata.t(), binary, binary} | {:error, term}
 
   @doc false
-  def default_options, do: [double_precision: 8, float_precision: 4, map_keys: :atoms]
+  def default_options, do: [double_precision: nil, float_precision: nil, map_keys: :strings]
 
   @doc """
   Looks up the data associated with an IP tuple.
