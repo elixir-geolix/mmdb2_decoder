@@ -21,213 +21,6 @@ defmodule MMDB2Decoder.Data do
   @extended_unsigned_64 2
   @extended_unsigned_128 3
 
-  @doc false
-  @spec decode(binary, binary, MMDB2Decoder.decode_options()) ::
-          {MMDB2Decoder.decoded_value(), binary}
-  def decode(<<@binary::size(3), 0::size(5), part_rest::binary>>, _, _) do
-    {"", part_rest}
-  end
-
-  def decode(<<@binary::size(3), 29::size(5), len::size(8), part_rest::binary>>, _, _) do
-    decode_binary(part_rest, 29 + len)
-  end
-
-  def decode(<<@binary::size(3), 30::size(5), len::size(16), part_rest::binary>>, _, _) do
-    decode_binary(part_rest, 285 + len)
-  end
-
-  def decode(<<@binary::size(3), 31::size(5), len::size(24), part_rest::binary>>, _, _) do
-    decode_binary(part_rest, 65_821 + len)
-  end
-
-  def decode(<<@binary::size(3), len::size(5), part_rest::binary>>, _, _) do
-    decode_binary(part_rest, len)
-  end
-
-  def decode(<<@bytes::size(3), 0::size(5), part_rest::binary>>, _, _) do
-    {"", part_rest}
-  end
-
-  def decode(<<@bytes::size(3), 29::size(5), len::size(8), part_rest::binary>>, _, _) do
-    decode_binary(part_rest, 29 + len)
-  end
-
-  def decode(<<@bytes::size(3), 30::size(5), len::size(16), part_rest::binary>>, _, _) do
-    decode_binary(part_rest, 285 + len)
-  end
-
-  def decode(<<@bytes::size(3), 31::size(5), len::size(24), part_rest::binary>>, _, _) do
-    decode_binary(part_rest, 65_821 + len)
-  end
-
-  def decode(<<@bytes::size(3), len::size(5), part_rest::binary>>, _, _) do
-    decode_binary(part_rest, len)
-  end
-
-  def decode(
-        <<@double::size(3), 8::size(5), value::size(64)-float, part_rest::binary>>,
-        _,
-        options
-      ) do
-    {maybe_round_float(value, options[:double_precision]), part_rest}
-  end
-
-  def decode(
-        <<@double::size(3), 8::size(5), value::size(64), part_rest::binary>>,
-        _,
-        options
-      ) do
-    {maybe_round_float(:erlang.float(value), options[:double_precision]), part_rest}
-  end
-
-  def decode(
-        <<@extended::size(3), 29::size(5), len::size(8), @extended_array, part_rest::binary>>,
-        data_full,
-        options
-      ) do
-    decode_array(part_rest, data_full, 28 + len, [], options)
-  end
-
-  def decode(
-        <<@extended::size(3), 30::size(5), len::size(16), @extended_array, part_rest::binary>>,
-        data_full,
-        options
-      ) do
-    decode_array(part_rest, data_full, 285 + len, [], options)
-  end
-
-  def decode(
-        <<@extended::size(3), 31::size(5), len::size(24), @extended_array, part_rest::binary>>,
-        data_full,
-        options
-      ) do
-    decode_array(part_rest, data_full, 65_821 + len, [], options)
-  end
-
-  def decode(
-        <<@extended::size(3), len::size(5), @extended_array, part_rest::binary>>,
-        data_full,
-        options
-      ) do
-    decode_array(part_rest, data_full, len, [], options)
-  end
-
-  def decode(<<@extended::size(3), 0::size(5), @extended_bool, part_rest::binary>>, _, _) do
-    {false, part_rest}
-  end
-
-  def decode(<<@extended::size(3), 1::size(5), @extended_bool, part_rest::binary>>, _, _) do
-    {true, part_rest}
-  end
-
-  def decode(<<@extended::size(3), _::size(5), @extended_cache, part_rest::binary>>, _, _) do
-    {:cache, part_rest}
-  end
-
-  def decode(<<@extended::size(3), 0::size(5), @extended_end_marker, part_rest::binary>>, _, _) do
-    {:end, part_rest}
-  end
-
-  def decode(
-        <<
-          @extended::size(3),
-          4::size(5),
-          @extended_float,
-          value::size(32)-float,
-          part_rest::binary
-        >>,
-        _,
-        options
-      ) do
-    {maybe_round_float(value, options[:float_precision]), part_rest}
-  end
-
-  def decode(
-        <<
-          @extended::size(3),
-          4::size(5),
-          @extended_float,
-          value::size(32),
-          part_rest::binary
-        >>,
-        _,
-        options
-      ) do
-    {maybe_round_float(:erlang.float(value), options[:float_precision]), part_rest}
-  end
-
-  def decode(<<@extended::size(3), len::size(5), @extended_signed_32, part_rest::binary>>, _, _) do
-    decode_signed(part_rest, len * 8)
-  end
-
-  def decode(<<@extended::size(3), len::size(5), @extended_unsigned_64, part_rest::binary>>, _, _) do
-    decode_unsigned(part_rest, len * 8)
-  end
-
-  def decode(
-        <<@extended::size(3), len::size(5), @extended_unsigned_128, part_rest::binary>>,
-        _,
-        _
-      ) do
-    decode_unsigned(part_rest, len * 8)
-  end
-
-  def decode(<<@map::size(3), 29::size(5), len::size(8), part_rest::binary>>, data_full, options) do
-    decode_map(part_rest, data_full, 28 + len, [], options)
-  end
-
-  def decode(<<@map::size(3), 30::size(5), len::size(16), part_rest::binary>>, data_full, options) do
-    decode_map(part_rest, data_full, 285 + len, [], options)
-  end
-
-  def decode(<<@map::size(3), 31::size(5), len::size(24), part_rest::binary>>, data_full, options) do
-    decode_map(part_rest, data_full, 65_821 + len, [], options)
-  end
-
-  def decode(<<@map::size(3), len::size(5), part_rest::binary>>, data_full, options) do
-    decode_map(part_rest, data_full, len, [], options)
-  end
-
-  def decode(
-        <<@pointer::size(3), 0::size(2), offset::size(11), part_rest::bitstring>>,
-        data_full,
-        options
-      ) do
-    {value(data_full, offset, options), part_rest}
-  end
-
-  def decode(
-        <<@pointer::size(3), 1::size(2), offset::size(19), part_rest::bitstring>>,
-        data_full,
-        options
-      ) do
-    {value(data_full, 2048 + offset, options), part_rest}
-  end
-
-  def decode(
-        <<@pointer::size(3), 2::size(2), offset::size(27), part_rest::bitstring>>,
-        data_full,
-        options
-      ) do
-    {value(data_full, 526_336 + offset, options), part_rest}
-  end
-
-  def decode(
-        <<@pointer::size(3), 3::size(2), offset::size(32), part_rest::bitstring>>,
-        data_full,
-        options
-      ) do
-    {value(data_full, offset, options), part_rest}
-  end
-
-  def decode(<<@unsigned_16::size(3), len::size(5), part_rest::binary>>, _, _) do
-    decode_unsigned(part_rest, len * 8)
-  end
-
-  def decode(<<@unsigned_32::size(3), len::size(5), part_rest::binary>>, _, _) do
-    decode_unsigned(part_rest, len * 8)
-  end
-
   @doc """
   Decodes the node at the given offset.
   """
@@ -243,7 +36,221 @@ defmodule MMDB2Decoder.Data do
 
   def value(_, _, _), do: nil
 
-  # value decoding
+  defp decode(<<@binary::size(3), 0::size(5), part_rest::binary>>, _, _) do
+    {"", part_rest}
+  end
+
+  defp decode(<<@binary::size(3), 29::size(5), len::size(8), part_rest::binary>>, _, _) do
+    decode_binary(part_rest, 29 + len)
+  end
+
+  defp decode(<<@binary::size(3), 30::size(5), len::size(16), part_rest::binary>>, _, _) do
+    decode_binary(part_rest, 285 + len)
+  end
+
+  defp decode(<<@binary::size(3), 31::size(5), len::size(24), part_rest::binary>>, _, _) do
+    decode_binary(part_rest, 65_821 + len)
+  end
+
+  defp decode(<<@binary::size(3), len::size(5), part_rest::binary>>, _, _) do
+    decode_binary(part_rest, len)
+  end
+
+  defp decode(<<@bytes::size(3), 0::size(5), part_rest::binary>>, _, _) do
+    {"", part_rest}
+  end
+
+  defp decode(<<@bytes::size(3), 29::size(5), len::size(8), part_rest::binary>>, _, _) do
+    decode_binary(part_rest, 29 + len)
+  end
+
+  defp decode(<<@bytes::size(3), 30::size(5), len::size(16), part_rest::binary>>, _, _) do
+    decode_binary(part_rest, 285 + len)
+  end
+
+  defp decode(<<@bytes::size(3), 31::size(5), len::size(24), part_rest::binary>>, _, _) do
+    decode_binary(part_rest, 65_821 + len)
+  end
+
+  defp decode(<<@bytes::size(3), len::size(5), part_rest::binary>>, _, _) do
+    decode_binary(part_rest, len)
+  end
+
+  defp decode(
+         <<@double::size(3), 8::size(5), value::size(64)-float, part_rest::binary>>,
+         _,
+         options
+       ) do
+    {maybe_round_float(value, options[:double_precision]), part_rest}
+  end
+
+  defp decode(
+         <<@double::size(3), 8::size(5), value::size(64), part_rest::binary>>,
+         _,
+         options
+       ) do
+    {maybe_round_float(:erlang.float(value), options[:double_precision]), part_rest}
+  end
+
+  defp decode(
+         <<@extended::size(3), 29::size(5), len::size(8), @extended_array, part_rest::binary>>,
+         data_full,
+         options
+       ) do
+    decode_array(part_rest, data_full, 28 + len, [], options)
+  end
+
+  defp decode(
+         <<@extended::size(3), 30::size(5), len::size(16), @extended_array, part_rest::binary>>,
+         data_full,
+         options
+       ) do
+    decode_array(part_rest, data_full, 285 + len, [], options)
+  end
+
+  defp decode(
+         <<@extended::size(3), 31::size(5), len::size(24), @extended_array, part_rest::binary>>,
+         data_full,
+         options
+       ) do
+    decode_array(part_rest, data_full, 65_821 + len, [], options)
+  end
+
+  defp decode(
+         <<@extended::size(3), len::size(5), @extended_array, part_rest::binary>>,
+         data_full,
+         options
+       ) do
+    decode_array(part_rest, data_full, len, [], options)
+  end
+
+  defp decode(<<@extended::size(3), 0::size(5), @extended_bool, part_rest::binary>>, _, _) do
+    {false, part_rest}
+  end
+
+  defp decode(<<@extended::size(3), 1::size(5), @extended_bool, part_rest::binary>>, _, _) do
+    {true, part_rest}
+  end
+
+  defp decode(<<@extended::size(3), _::size(5), @extended_cache, part_rest::binary>>, _, _) do
+    {:cache, part_rest}
+  end
+
+  defp decode(<<@extended::size(3), 0::size(5), @extended_end_marker, part_rest::binary>>, _, _) do
+    {:end, part_rest}
+  end
+
+  defp decode(
+         <<
+           @extended::size(3),
+           4::size(5),
+           @extended_float,
+           value::size(32)-float,
+           part_rest::binary
+         >>,
+         _,
+         options
+       ) do
+    {maybe_round_float(value, options[:float_precision]), part_rest}
+  end
+
+  defp decode(
+         <<
+           @extended::size(3),
+           4::size(5),
+           @extended_float,
+           value::size(32),
+           part_rest::binary
+         >>,
+         _,
+         options
+       ) do
+    {maybe_round_float(:erlang.float(value), options[:float_precision]), part_rest}
+  end
+
+  defp decode(<<@extended::size(3), len::size(5), @extended_signed_32, part_rest::binary>>, _, _) do
+    decode_signed(part_rest, len * 8)
+  end
+
+  defp decode(
+         <<@extended::size(3), len::size(5), @extended_unsigned_64, part_rest::binary>>,
+         _,
+         _
+       ) do
+    decode_unsigned(part_rest, len * 8)
+  end
+
+  defp decode(
+         <<@extended::size(3), len::size(5), @extended_unsigned_128, part_rest::binary>>,
+         _,
+         _
+       ) do
+    decode_unsigned(part_rest, len * 8)
+  end
+
+  defp decode(<<@map::size(3), 29::size(5), len::size(8), part_rest::binary>>, data_full, options) do
+    decode_map(part_rest, data_full, 28 + len, [], options)
+  end
+
+  defp decode(
+         <<@map::size(3), 30::size(5), len::size(16), part_rest::binary>>,
+         data_full,
+         options
+       ) do
+    decode_map(part_rest, data_full, 285 + len, [], options)
+  end
+
+  defp decode(
+         <<@map::size(3), 31::size(5), len::size(24), part_rest::binary>>,
+         data_full,
+         options
+       ) do
+    decode_map(part_rest, data_full, 65_821 + len, [], options)
+  end
+
+  defp decode(<<@map::size(3), len::size(5), part_rest::binary>>, data_full, options) do
+    decode_map(part_rest, data_full, len, [], options)
+  end
+
+  defp decode(
+         <<@pointer::size(3), 0::size(2), offset::size(11), part_rest::bitstring>>,
+         data_full,
+         options
+       ) do
+    {value(data_full, offset, options), part_rest}
+  end
+
+  defp decode(
+         <<@pointer::size(3), 1::size(2), offset::size(19), part_rest::bitstring>>,
+         data_full,
+         options
+       ) do
+    {value(data_full, 2048 + offset, options), part_rest}
+  end
+
+  defp decode(
+         <<@pointer::size(3), 2::size(2), offset::size(27), part_rest::bitstring>>,
+         data_full,
+         options
+       ) do
+    {value(data_full, 526_336 + offset, options), part_rest}
+  end
+
+  defp decode(
+         <<@pointer::size(3), 3::size(2), offset::size(32), part_rest::bitstring>>,
+         data_full,
+         options
+       ) do
+    {value(data_full, offset, options), part_rest}
+  end
+
+  defp decode(<<@unsigned_16::size(3), len::size(5), part_rest::binary>>, _, _) do
+    decode_unsigned(part_rest, len * 8)
+  end
+
+  defp decode(<<@unsigned_32::size(3), len::size(5), part_rest::binary>>, _, _) do
+    decode_unsigned(part_rest, len * 8)
+  end
 
   defp decode_array(data_part, _, 0, acc, _) do
     {Enum.reverse(acc), data_part}
