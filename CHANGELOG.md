@@ -3,6 +3,8 @@
 ## v2.0.0-dev
 
 - Backwards incompatible changes
+    - Database entries of the type `data cache container` now return `:cache_container` (was `:cache`)
+    - Database entries of the type `end marker` now return `:end_marker` (was `:end`)
     - New decoding defaults are now active:
         - `double_prevision: nil`
         - `float_precision: nil`
