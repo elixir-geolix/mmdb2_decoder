@@ -13,8 +13,8 @@ defmodule MMDB2Decoder.Data do
 
   # extended data types
   @extended_array 4
-  @extended_bool 7
-  @extended_cache 5
+  @extended_boolean 7
+  @extended_cache_container 5
   @extended_end_marker 6
   @extended_float 8
   @extended_signed_32 1
@@ -124,15 +124,15 @@ defmodule MMDB2Decoder.Data do
     decode_array(part_rest, data_full, len, [], options)
   end
 
-  defp decode(<<@extended::size(3), 0::size(5), @extended_bool, part_rest::binary>>, _, _) do
+  defp decode(<<@extended::size(3), 0::size(5), @extended_boolean, part_rest::binary>>, _, _) do
     {false, part_rest}
   end
 
-  defp decode(<<@extended::size(3), 1::size(5), @extended_bool, part_rest::binary>>, _, _) do
+  defp decode(<<@extended::size(3), 1::size(5), @extended_boolean, part_rest::binary>>, _, _) do
     {true, part_rest}
   end
 
-  defp decode(<<@extended::size(3), _::size(5), @extended_cache, part_rest::binary>>, _, _) do
+  defp decode(<<@extended::size(3), _::size(5), @extended_cache_container, part_rest::binary>>, _, _) do
     {:cache_container, part_rest}
   end
 
