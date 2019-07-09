@@ -39,7 +39,7 @@ defmodule MMDB2Decoder do
           | {:float_precision, Float.precision_range()}
           | {:map_keys, :atoms | :atoms! | :strings}
   @type decode_options :: [decode_option]
-  @type decoded_value :: :cache | :end | binary | boolean | list | map | number
+  @type decoded_value :: :cache_container | :end_marker | binary | boolean | list | map | number
   @type lookup_value :: decoded_value | nil
 
   @type lookup_result :: {:ok, lookup_value} | {:error, term}
