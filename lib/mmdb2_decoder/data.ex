@@ -132,7 +132,11 @@ defmodule MMDB2Decoder.Data do
     {true, part_rest}
   end
 
-  defp decode(<<@extended::size(3), _::size(5), @extended_cache_container, part_rest::binary>>, _, _) do
+  defp decode(
+         <<@extended::size(3), _::size(5), @extended_cache_container, part_rest::binary>>,
+         _,
+         _
+       ) do
     {:cache_container, part_rest}
   end
 
