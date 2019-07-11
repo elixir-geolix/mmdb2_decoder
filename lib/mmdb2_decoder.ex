@@ -19,14 +19,6 @@ defmodule MMDB2Decoder do
 
   For more details on the lookup methods (and a function suitable for
   direct piping) please see the individual function documentations.
-
-  ### Floating Point Precision
-
-  Please be aware that all values of the type `float` are rounded to 4
-  decimal digits and `double` values to 8 decimal digits.
-
-  This might be changed in the future if there are datasets known to
-  return values with a higher precision.
   """
 
   alias MMDB2Decoder.Data
