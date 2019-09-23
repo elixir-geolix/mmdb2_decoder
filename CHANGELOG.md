@@ -2,6 +2,9 @@
 
 ## v2.0.0-dev
 
+- Enhancements
+    - The pointer an IP has can be retrieved
+
 - Backwards incompatible changes
     - Database entries of the type `data cache container` now return `:cache_container` (was `:cache`)
     - Database entries of the type `end marker` now return `:end_marker` (was `:end`)

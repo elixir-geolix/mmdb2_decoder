@@ -56,9 +56,39 @@ defmodule MMDB2Decoder do
 
   @type lookup_result :: {:ok, lookup_value} | {:error, term}
   @type parse_result :: {:ok, Metadata.t(), binary, binary} | {:error, term}
+  @type tree_result :: {:ok, non_neg_integer} | {:error, term}
 
   @doc false
   def default_options, do: [double_precision: nil, float_precision: nil, map_keys: :strings]
+
+  @doc """
+  Fetches the pointer of an IP in the data if available.
+
+  The pointer will be calculated to be relative to the start of the binary data.
+
+  ## Usage
+
+      iex> MMDB2Decoder.find_pointer({127, 0, 0, 1}, meta, tree)
+      123456
+  """
+  @spec find_pointer(:inet.ip_address(), Metadata.t(), binary) :: tree_result
+  def find_pointer(ip, meta, tree) do
+    case LookupTree.locate(ip, meta, tree) do
+      {:error, _} = error -> error
+      {:ok, pointer} -> {:ok, pointer - meta.node_count - 16}
+    end
+  end
+
+  @doc """
+  Calls `find_pointer/3` and raises if an error occurs.
+  """
+  @spec find_pointer!(:inet.ip_address(), Metadata.t(), binary) :: non_neg_integer | no_return
+  def find_pointer!(ip, meta, tree) do
+    case find_pointer(ip, meta, tree) do
+      {:ok, pointer} -> pointer
+      {:error, error} -> raise error
+    end
+  end
 
   @doc """
   Looks up the data associated with an IP tuple.
@@ -84,11 +114,14 @@ defmodule MMDB2Decoder do
   """
   @spec lookup(:inet.ip_address(), Metadata.t(), binary, binary, decode_options) :: lookup_result
   def lookup(ip, meta, tree, data, options \\ []) do
-    options = Keyword.merge(default_options(), options)
+    case find_pointer(ip, meta, tree) do
+      {:error, _} = error ->
+        error
 
-    case LookupTree.locate(ip, meta, tree) do
-      {:error, _} = error -> error
-      {:ok, pointer} -> {:ok, Data.value(data, pointer - meta.node_count - 16, options)}
+      {:ok, pointer} ->
+        options = Keyword.merge(default_options(), options)
+
+        {:ok, Data.value(data, pointer, options)}
     end
   end
 
