@@ -115,13 +115,8 @@ defmodule MMDB2Decoder do
   @spec lookup(:inet.ip_address(), Metadata.t(), binary, binary, decode_options) :: lookup_result
   def lookup(ip, meta, tree, data, options \\ []) do
     case find_pointer(ip, meta, tree) do
-      {:error, _} = error ->
-        error
-
-      {:ok, pointer} ->
-        options = Keyword.merge(default_options(), options)
-
-        {:ok, Data.value(data, pointer, options)}
+      {:error, _} = error -> error
+      {:ok, pointer} -> lookup_pointer(pointer, data, options)
     end
   end
 
@@ -135,6 +130,40 @@ defmodule MMDB2Decoder do
       {:ok, result} -> result
       {:error, error} -> raise error
     end
+  end
+
+  @doc """
+  Fetches the data at a given pointer position.
+
+  The pointer is expected to be relative to the start of the binary data.
+
+  ## Usage
+
+      iex> MMDB2Decoder.lookup_pointer(123456, data)
+      {
+        :ok,
+        %{
+          continent: %{...},
+          country: %{...},
+          registered_country: %{...}
+        }
+      }
+  """
+  @spec lookup_pointer(non_neg_integer, binary, Keyword.t()) :: {:ok, lookup_value}
+  def lookup_pointer(pointer, data, options \\ []) do
+    options = Keyword.merge(default_options(), options)
+
+    {:ok, Data.value(data, pointer, options)}
+  end
+
+  @doc """
+  Calls `lookup_pointer/3` an unrolls the return tuple.
+  """
+  @spec lookup_pointer!(non_neg_integer, binary, Keyword.t()) :: lookup_value
+  def lookup_pointer!(pointer, data, options \\ []) do
+    {:ok, data} = lookup_pointer(pointer, data, options)
+
+    data
   end
 
   @doc """

@@ -3,6 +3,7 @@
 ## v2.0.0-dev
 
 - Enhancements
+    - The data at a specific pointer position can be retrieved
     - The pointer an IP has can be retrieved
 
 - Backwards incompatible changes
