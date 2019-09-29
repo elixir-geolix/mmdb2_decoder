@@ -157,7 +157,7 @@ defmodule MMDB2Decoder do
   end
 
   @doc """
-  Calls `lookup_pointer/3` an unrolls the return tuple.
+  Calls `lookup_pointer/3` and unrolls the return tuple.
   """
   @spec lookup_pointer!(non_neg_integer, binary, Keyword.t()) :: lookup_value
   def lookup_pointer!(pointer, data, options \\ []) do
