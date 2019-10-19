@@ -13,6 +13,7 @@
         - `double_prevision: nil`
         - `float_precision: nil`
         - `map_keys: :strings`
+            - As a result the database descriptions in `MMDB2Decoder.Metadata` are now always a map with binary keys instead of atom keys
     - `MMDB2Decoder.Data.decode/3` is now private
 
 ## v1.1.0 (2019-07-06)
