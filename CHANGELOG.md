@@ -9,6 +9,7 @@
 - Backwards incompatible changes
     - Database entries of the type `data cache container` now return `:cache_container` (was `:cache`)
     - Database entries of the type `end marker` now return `:end_marker` (was `:end`)
+    - Minimum required elixir version is now `~> 1.7`
     - New decoding defaults are now active:
         - `double_prevision: nil`
         - `float_precision: nil`
