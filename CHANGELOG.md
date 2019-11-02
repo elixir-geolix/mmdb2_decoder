@@ -1,6 +1,6 @@
 # Changelog
 
-## v2.0.0-dev
+## v2.0.0 (2019-11-02)
 
 - Enhancements
     - The data at a specific pointer position can be retrieved
