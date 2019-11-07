@@ -1,5 +1,10 @@
 # Changelog
 
+## v2.1.0-dev
+
+- Bug fixes
+    - Decoding `:pointer` with a 32 bit offset should now work as expected
+
 ## v2.0.0 (2019-11-02)
 
 - Enhancements

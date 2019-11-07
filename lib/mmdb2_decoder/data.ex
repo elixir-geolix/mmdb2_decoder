@@ -241,7 +241,7 @@ defmodule MMDB2Decoder.Data do
   end
 
   defp decode(
-         <<@pointer::size(3), 3::size(2), offset::size(32), part_rest::bitstring>>,
+         <<@pointer::size(3), 3::size(2), _::size(3), offset::size(32), part_rest::bitstring>>,
          data_full,
          options
        ) do
