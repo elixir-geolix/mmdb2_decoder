@@ -61,20 +61,44 @@ defmodule MMDB2Decoder.LookupTree do
   end
 
   defp traverse(
-         <<node_bit::size(1), rest::bitstring>>,
+         <<0::size(1), rest::bitstring>>,
          node,
          node_count,
          record_size,
          tree
        )
        when node < node_count do
-    traverse(
-      rest,
-      read_node(node, node_bit, record_size, tree),
-      node_count,
-      record_size,
-      tree
-    )
+    node_start = div(node * record_size, 4)
+    node_len = div(record_size, 4)
+    node_part = binary_part(tree, node_start, node_len)
+
+    record_half = rem(record_size, 8)
+    record_left = record_size - record_half
+
+    <<low::size(record_left), high::size(record_half), _::bitstring>> = node_part
+
+    node_next = low + (high <<< record_left)
+
+    traverse(rest, node_next, node_count, record_size, tree)
+  end
+
+  defp traverse(
+         <<1::size(1), rest::bitstring>>,
+         node,
+         node_count,
+         record_size,
+         tree
+       )
+       when node < node_count do
+    node_start = div(node * record_size, 4)
+    node_len = div(record_size, 4)
+    node_part = binary_part(tree, node_start, node_len)
+
+    <<_::size(record_size), right::size(record_size)>> = node_part
+
+    node_next = right
+
+    traverse(rest, node_next, node_count, record_size, tree)
   end
 
   defp traverse(_, node, node_count, _, _)
@@ -85,24 +109,4 @@ defmodule MMDB2Decoder.LookupTree do
   defp traverse(_, node, node_count, _, _)
        when node < node_count,
        do: {:error, :node_below_count}
-
-  defp read_node(node, index, record_size, tree) do
-    node_start = div(node * record_size, 4)
-    node_len = div(record_size, 4)
-    node_part = binary_part(tree, node_start, node_len)
-
-    case index do
-      0 ->
-        record_half = rem(record_size, 8)
-        record_left = record_size - record_half
-
-        <<low::size(record_left), high::size(record_half), _::bitstring>> = node_part
-
-        low + (high <<< record_left)
-
-      1 ->
-        <<_::size(record_size), right::size(record_size)>> = node_part
-        right
-    end
-  end
 end
