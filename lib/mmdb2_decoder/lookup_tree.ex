@@ -11,37 +11,14 @@ defmodule MMDB2Decoder.LookupTree do
   @spec locate(tuple, Metadata.t(), binary) :: {:ok, non_neg_integer} | {:error, term}
   def locate(
         {a, b, c, d},
-        %{
-          ip_version: 6,
-          node_byte_size: node_size,
-          node_count: node_count,
-          record_size: record_size
-        },
+        %{ip_version: 6} = meta,
         tree
       ) do
-    traverse(
-      <<a::size(8), b::size(8), c::size(8), d::size(8)>>,
-      96,
-      node_count,
-      node_size,
-      record_size,
-      tree
-    )
+    do_locate(<<a::size(8), b::size(8), c::size(8), d::size(8)>>, 96, meta, tree)
   end
 
-  def locate(
-        {a, b, c, d},
-        %{node_byte_size: node_size, node_count: node_count, record_size: record_size},
-        tree
-      ) do
-    traverse(
-      <<a::size(8), b::size(8), c::size(8), d::size(8)>>,
-      0,
-      node_count,
-      node_size,
-      record_size,
-      tree
-    )
+  def locate({a, b, c, d}, meta, tree) do
+    do_locate(<<a::size(8), b::size(8), c::size(8), d::size(8)>>, 0, meta, tree)
   end
 
   def locate({0, 0, 0, 0, 0, 65_535, a, b}, meta, tree) do
@@ -50,28 +27,23 @@ defmodule MMDB2Decoder.LookupTree do
 
   def locate({_, _, _, _, _, _, _, _}, %{ip_version: 4}, _), do: {:ok, 0}
 
-  def locate(
-        {a, b, c, d, e, f, g, h},
-        %{node_byte_size: node_size, node_count: node_count, record_size: record_size},
-        tree
-      ) do
-    traverse(
-      <<
-        a::size(16),
-        b::size(16),
-        c::size(16),
-        d::size(16),
-        e::size(16),
-        f::size(16),
-        g::size(16),
-        h::size(16)
-      >>,
+  def locate({a, b, c, d, e, f, g, h}, meta, tree) do
+    do_locate(
+      <<a::size(16), b::size(16), c::size(16), d::size(16), e::size(16), f::size(16), g::size(16),
+        h::size(16)>>,
       0,
-      node_count,
-      node_size,
-      record_size,
+      meta,
       tree
     )
+  end
+
+  defp do_locate(
+         address,
+         node,
+         %{node_byte_size: node_size, node_count: node_count, record_size: record_size},
+         tree
+       ) do
+    traverse(address, node, node_count, node_size, record_size, tree)
   end
 
   defp traverse(
