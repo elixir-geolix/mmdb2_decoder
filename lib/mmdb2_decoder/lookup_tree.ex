@@ -97,9 +97,8 @@ defmodule MMDB2Decoder.LookupTree do
   end
 
   defp traverse(_, node, node_count, _, _)
-       when node >= node_count do
-    {:ok, node}
-  end
+       when node >= node_count,
+       do: {:ok, node}
 
   defp traverse(_, node, node_count, _, _)
        when node < node_count,
