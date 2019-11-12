@@ -59,6 +59,7 @@ defmodule MMDB2Decoder do
   @type tree_result :: {:ok, non_neg_integer} | {:error, term}
 
   @doc false
+  @spec default_options() :: decode_options
   def default_options, do: [double_precision: nil, float_precision: nil, map_keys: :strings]
 
   @doc """
