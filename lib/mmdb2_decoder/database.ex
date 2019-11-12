@@ -50,11 +50,9 @@ defmodule MMDB2Decoder.Database do
       meta = %{meta | node_byte_size: node_byte_size}
       meta = %{meta | tree_size: tree_size}
 
-      tree = binary_part(data, 0, tree_size)
-      data_size = byte_size(data) - byte_size(tree) - 16
-      data = binary_part(data, tree_size + 16, data_size)
+      <<tree_part::size(tree_size)-binary, _::size(16)-binary, data_part::binary>> = data
 
-      {:ok, meta, tree, data}
+      {:ok, meta, tree_part, data_part}
     else
       {:error, :invalid_node_count}
     end
