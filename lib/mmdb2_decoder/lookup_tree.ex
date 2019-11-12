@@ -51,18 +51,31 @@ defmodule MMDB2Decoder.LookupTree do
          node,
          node_count,
          node_size,
+         28 = record_size,
+         tree
+       )
+       when node < node_count do
+    node_start = node * node_size
+
+    <<_::size(node_start)-binary, low::size(24), high::size(4), _::bitstring>> = tree
+
+    node_next = low + (high <<< 24)
+
+    traverse(rest, node_next, node_count, node_size, record_size, tree)
+  end
+
+  defp traverse(
+         <<0::size(1), rest::bitstring>>,
+         node,
+         node_count,
+         node_size,
          record_size,
          tree
        )
        when node < node_count do
     node_start = node * node_size
-    record_half = rem(record_size, 8)
-    record_left = record_size - record_half
 
-    <<_::size(node_start)-binary, low::size(record_left), high::size(record_half), _::bitstring>> =
-      tree
-
-    node_next = low + (high <<< record_left)
+    <<_::size(node_start)-binary, node_next::size(record_size), _::bitstring>> = tree
 
     traverse(rest, node_next, node_count, node_size, record_size, tree)
   end
