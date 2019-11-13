@@ -30,9 +30,9 @@ defmodule MMDB2Decoder do
   The following options are available:
 
   - `:map_keys` defines the type of the keys in a decoded map:
-      -- `:strings` is the default value
-        - `:atoms` uses `String.to_atom/1`
-        - `:atoms!` uses `String.to_existing_atom/1`
+      - `:strings` is the default value
+      - `:atoms` uses `String.to_atom/1`
+      - `:atoms!` uses `String.to_existing_atom/1`
   - `:double_precision` defines the precision of decoded Double values
       - `nil` is the default for "unlimited" precision
       - any value from `t:Float.precision_range/0` to round the precision to
