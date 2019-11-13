@@ -162,9 +162,9 @@ defmodule MMDB2Decoder do
   """
   @spec lookup_pointer!(non_neg_integer, binary, Keyword.t()) :: lookup_value
   def lookup_pointer!(pointer, data, options \\ []) do
-    {:ok, data} = lookup_pointer(pointer, data, options)
+    {:ok, value} = lookup_pointer(pointer, data, options)
 
-    data
+    value
   end
 
   @doc """
