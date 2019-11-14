@@ -285,6 +285,7 @@ defmodule MMDB2Decoder.Data do
         :atoms -> String.to_atom(key)
         :atoms! -> String.to_existing_atom(key)
         :strings -> key
+        nil -> key
       end
 
     decode_map(dec_rest, data_full, size - 1, [{key, value} | acc], options)

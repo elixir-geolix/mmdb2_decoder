@@ -58,10 +58,6 @@ defmodule MMDB2Decoder do
   @type parse_result :: {:ok, Metadata.t(), binary, binary} | {:error, term}
   @type tree_result :: {:ok, non_neg_integer} | {:error, term}
 
-  @doc false
-  @spec default_options() :: decode_options
-  def default_options, do: [double_precision: nil, float_precision: nil, map_keys: :strings]
-
   @doc """
   Fetches the pointer of an IP in the data if available.
 
@@ -152,8 +148,6 @@ defmodule MMDB2Decoder do
   """
   @spec lookup_pointer(non_neg_integer, binary, Keyword.t()) :: {:ok, lookup_value}
   def lookup_pointer(pointer, data, options \\ []) do
-    options = Keyword.merge(default_options(), options)
-
     {:ok, Data.value(data, pointer, options)}
   end
 

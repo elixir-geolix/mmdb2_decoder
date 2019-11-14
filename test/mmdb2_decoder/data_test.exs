@@ -219,6 +219,18 @@ defmodule MMDB2Decoder.DataTest do
     assert result_atoms == result_atoms!
   end
 
+  test "decode map_keys as :string or nil is identical" do
+    {:ok, meta, tree, data} =
+      :fixture_decoder
+      |> Fixture.contents()
+      |> MMDB2Decoder.parse_database()
+
+    result_nil = MMDB2Decoder.lookup({1, 1, 1, 0}, meta, tree, data, map_keys: nil)
+    result_strings = MMDB2Decoder.lookup({1, 1, 1, 0}, meta, tree, data, map_keys: :strings)
+
+    assert result_nil == result_strings
+  end
+
   test "decoded values with default options" do
     {:ok, decoded} =
       :fixture_decoder
