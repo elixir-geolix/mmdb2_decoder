@@ -280,13 +280,7 @@ defmodule MMDB2Decoder.Data do
     {key, part_rest} = decode(data_part, data_full, options)
     {value, dec_rest} = decode(part_rest, data_full, options)
 
-    key =
-      case options[:map_keys] do
-        :atoms -> String.to_atom(key)
-        :atoms! -> String.to_existing_atom(key)
-        :strings -> key
-        nil -> key
-      end
+    key = maybe_convert_map_key(key, options[:map_keys])
 
     decode_map(dec_rest, data_full, size - 1, [{key, value} | acc], options)
   end
@@ -302,6 +296,11 @@ defmodule MMDB2Decoder.Data do
 
     {value, rest}
   end
+
+  defp maybe_convert_map_key(value, nil), do: value
+  defp maybe_convert_map_key(value, :atoms), do: String.to_atom(value)
+  defp maybe_convert_map_key(value, :atoms!), do: String.to_existing_atom(value)
+  defp maybe_convert_map_key(value, :strings), do: value
 
   defp maybe_round_float(value, nil), do: value
   defp maybe_round_float(value, precision), do: Float.round(value, precision)
