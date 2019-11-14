@@ -146,7 +146,7 @@ defmodule MMDB2Decoder do
         }
       }
   """
-  @spec lookup_pointer(non_neg_integer, binary, Keyword.t()) :: {:ok, lookup_value}
+  @spec lookup_pointer(non_neg_integer, binary, decode_options) :: {:ok, lookup_value}
   def lookup_pointer(pointer, data, options \\ []) do
     {:ok, Data.value(data, pointer, options)}
   end
@@ -154,7 +154,7 @@ defmodule MMDB2Decoder do
   @doc """
   Calls `lookup_pointer/3` and unrolls the return tuple.
   """
-  @spec lookup_pointer!(non_neg_integer, binary, Keyword.t()) :: lookup_value
+  @spec lookup_pointer!(non_neg_integer, binary, decode_options) :: lookup_value
   def lookup_pointer!(pointer, data, options \\ []) do
     {:ok, value} = lookup_pointer(pointer, data, options)
 
