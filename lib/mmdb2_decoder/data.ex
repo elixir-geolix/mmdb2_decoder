@@ -26,7 +26,9 @@ defmodule MMDB2Decoder.Data do
   """
   @spec value(binary, non_neg_integer, MMDB2Decoder.decode_options()) ::
           MMDB2Decoder.lookup_value()
-  def value(data, offset, options) when byte_size(data) > offset and offset >= 0 do
+  def value(data, offset, options), do: decode_value(data, offset, Map.new(options))
+
+  defp decode_value(data, offset, options) when byte_size(data) > offset and offset >= 0 do
     <<_::size(offset)-binary, rest::binary>> = data
 
     {value, _rest} = decode(rest, data, options)
@@ -34,7 +36,7 @@ defmodule MMDB2Decoder.Data do
     value
   end
 
-  def value(_, _, _), do: nil
+  defp decode_value(_, _, _), do: nil
 
   defp decode(<<@binary::size(3), 0::size(5), part_rest::binary>>, _, _) do
     {"", part_rest}
@@ -81,7 +83,7 @@ defmodule MMDB2Decoder.Data do
          _,
          options
        ) do
-    {maybe_round_float(value, options[:double_precision]), part_rest}
+    {maybe_round_double(value, options), part_rest}
   end
 
   defp decode(
@@ -89,7 +91,7 @@ defmodule MMDB2Decoder.Data do
          _,
          options
        ) do
-    {maybe_round_float(:erlang.float(value), options[:double_precision]), part_rest}
+    {maybe_round_double(:erlang.float(value), options), part_rest}
   end
 
   defp decode(
@@ -155,7 +157,7 @@ defmodule MMDB2Decoder.Data do
          _,
          options
        ) do
-    {maybe_round_float(value, options[:float_precision]), part_rest}
+    {maybe_round_float(value, options), part_rest}
   end
 
   defp decode(
@@ -169,7 +171,7 @@ defmodule MMDB2Decoder.Data do
          _,
          options
        ) do
-    {maybe_round_float(:erlang.float(value), options[:float_precision]), part_rest}
+    {maybe_round_float(:erlang.float(value), options), part_rest}
   end
 
   defp decode(<<@extended::size(3), len::size(5), @extended_signed_32, part_rest::binary>>, _, _) do
@@ -221,7 +223,7 @@ defmodule MMDB2Decoder.Data do
          data_full,
          options
        ) do
-    {value(data_full, offset, options), part_rest}
+    {decode_value(data_full, offset, options), part_rest}
   end
 
   defp decode(
@@ -229,7 +231,7 @@ defmodule MMDB2Decoder.Data do
          data_full,
          options
        ) do
-    {value(data_full, 2048 + offset, options), part_rest}
+    {decode_value(data_full, 2048 + offset, options), part_rest}
   end
 
   defp decode(
@@ -237,7 +239,7 @@ defmodule MMDB2Decoder.Data do
          data_full,
          options
        ) do
-    {value(data_full, 526_336 + offset, options), part_rest}
+    {decode_value(data_full, 526_336 + offset, options), part_rest}
   end
 
   defp decode(
@@ -245,7 +247,7 @@ defmodule MMDB2Decoder.Data do
          data_full,
          options
        ) do
-    {value(data_full, offset, options), part_rest}
+    {decode_value(data_full, offset, options), part_rest}
   end
 
   defp decode(<<@unsigned_16::size(3), len::size(5), part_rest::binary>>, _, _) do
@@ -280,7 +282,7 @@ defmodule MMDB2Decoder.Data do
     {key, part_rest} = decode(data_part, data_full, options)
     {value, dec_rest} = decode(part_rest, data_full, options)
 
-    key = maybe_convert_map_key(key, options[:map_keys])
+    key = maybe_convert_map_key(key, options)
 
     decode_map(dec_rest, data_full, size - 1, [{key, value} | acc], options)
   end
@@ -297,11 +299,19 @@ defmodule MMDB2Decoder.Data do
     {value, rest}
   end
 
-  defp maybe_convert_map_key(value, nil), do: value
-  defp maybe_convert_map_key(value, :atoms), do: String.to_atom(value)
-  defp maybe_convert_map_key(value, :atoms!), do: String.to_existing_atom(value)
-  defp maybe_convert_map_key(value, :strings), do: value
+  defp maybe_convert_map_key(value, %{map_keys: :atoms}), do: String.to_atom(value)
+  defp maybe_convert_map_key(value, %{map_keys: :atoms!}), do: String.to_existing_atom(value)
+  defp maybe_convert_map_key(value, %{map_keys: :strings}), do: value
+  defp maybe_convert_map_key(value, _), do: value
 
-  defp maybe_round_float(value, nil), do: value
-  defp maybe_round_float(value, precision), do: Float.round(value, precision)
+  defp maybe_round_double(value, %{double_precision: nil}), do: value
+
+  defp maybe_round_double(value, %{double_precision: precision}),
+    do: Float.round(value, precision)
+
+  defp maybe_round_double(value, _), do: value
+
+  defp maybe_round_float(value, %{float_precision: nil}), do: value
+  defp maybe_round_float(value, %{float_precision: precision}), do: Float.round(value, precision)
+  defp maybe_round_float(value, _), do: value
 end

@@ -207,6 +207,30 @@ defmodule MMDB2Decoder.DataTest do
     assert decoded[:utf8_string] == "unicode! ☯ - ♫"
   end
 
+  test "decode double values with unset or nil precision identical" do
+    {:ok, meta, tree, data} =
+      :fixture_decoder
+      |> Fixture.contents()
+      |> MMDB2Decoder.parse_database()
+
+    result_nil = MMDB2Decoder.lookup({1, 1, 1, 0}, meta, tree, data, double_precision: nil)
+    result_unset = MMDB2Decoder.lookup({1, 1, 1, 0}, meta, tree, data, [])
+
+    assert result_nil == result_unset
+  end
+
+  test "decode float values with unset or nil precision identical" do
+    {:ok, meta, tree, data} =
+      :fixture_decoder
+      |> Fixture.contents()
+      |> MMDB2Decoder.parse_database()
+
+    result_nil = MMDB2Decoder.lookup({1, 1, 1, 0}, meta, tree, data, float_precision: nil)
+    result_unset = MMDB2Decoder.lookup({1, 1, 1, 0}, meta, tree, data, [])
+
+    assert result_nil == result_unset
+  end
+
   test "decode map_keys as :atoms or :atoms! is identical" do
     {:ok, meta, tree, data} =
       :fixture_decoder
