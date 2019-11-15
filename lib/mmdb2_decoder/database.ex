@@ -27,7 +27,7 @@ defmodule MMDB2Decoder.Database do
   @spec split_data(binary, binary) ::
           {:ok, Metadata.t(), binary, binary} | {:error, :invalid_node_count}
   def split_data(meta, data) do
-    meta = Data.value(meta, 0, [])
+    meta = Data.value(meta, 0, %{})
 
     meta = %Metadata{
       binary_format_major_version: meta["binary_format_major_version"],
