@@ -50,13 +50,27 @@ defmodule MMDB2Decoder do
           {:double_precision, Float.precision_range()}
           | {:float_precision, Float.precision_range()}
           | {:map_keys, :atoms | :atoms! | :strings}
-  @type decode_options :: [decode_option]
+
+  @type decode_options ::
+          %{
+            optional(:double_precision) => nil | Float.precision_range(),
+            optional(:float_precision) => nil | Float.precision_range(),
+            optional(:map_keys) => nil | :atoms | :atoms! | :strings
+          }
+          | [decode_option]
+
   @type decoded_value :: :cache_container | :end_marker | binary | boolean | list | map | number
   @type lookup_value :: decoded_value | nil
 
   @type lookup_result :: {:ok, lookup_value} | {:error, term}
   @type parse_result :: {:ok, Metadata.t(), binary, binary} | {:error, term}
   @type tree_result :: {:ok, non_neg_integer} | {:error, term}
+
+  @default_decode_options %{
+    double_precision: nil,
+    float_precision: nil,
+    map_keys: :strings
+  }
 
   @doc """
   Fetches the pointer of an IP in the data if available.
@@ -110,7 +124,7 @@ defmodule MMDB2Decoder do
   parsing the file contents of a database using `parse_database/1`.
   """
   @spec lookup(:inet.ip_address(), Metadata.t(), binary, binary, decode_options) :: lookup_result
-  def lookup(ip, meta, tree, data, options \\ []) do
+  def lookup(ip, meta, tree, data, options \\ @default_decode_options) do
     case find_pointer(ip, meta, tree) do
       {:error, _} = error -> error
       {:ok, pointer} -> lookup_pointer(pointer, data, options)
@@ -122,7 +136,7 @@ defmodule MMDB2Decoder do
   """
   @spec lookup!(:inet.ip_address(), Metadata.t(), binary, binary, decode_options) ::
           lookup_value | no_return
-  def lookup!(ip, meta, tree, data, options \\ []) do
+  def lookup!(ip, meta, tree, data, options \\ @default_decode_options) do
     case lookup(ip, meta, tree, data, options) do
       {:ok, result} -> result
       {:error, error} -> raise error
@@ -147,7 +161,7 @@ defmodule MMDB2Decoder do
       }
   """
   @spec lookup_pointer(non_neg_integer, binary, decode_options) :: {:ok, lookup_value}
-  def lookup_pointer(pointer, data, options \\ []) do
+  def lookup_pointer(pointer, data, options \\ @default_decode_options) do
     {:ok, Data.value(data, pointer, options)}
   end
 
@@ -155,7 +169,7 @@ defmodule MMDB2Decoder do
   Calls `lookup_pointer/3` and unrolls the return tuple.
   """
   @spec lookup_pointer!(non_neg_integer, binary, decode_options) :: lookup_value
-  def lookup_pointer!(pointer, data, options \\ []) do
+  def lookup_pointer!(pointer, data, options \\ @default_decode_options) do
     {:ok, value} = lookup_pointer(pointer, data, options)
 
     value
@@ -205,7 +219,7 @@ defmodule MMDB2Decoder do
       {:ok, %{...}}
   """
   @spec pipe_lookup(parse_result, :inet.ip_address(), decode_options) :: lookup_result
-  def pipe_lookup(parse_result, ip, options \\ [])
+  def pipe_lookup(parse_result, ip, options \\ @default_decode_options)
 
   def pipe_lookup({:error, _} = error, _, _), do: error
 
@@ -219,7 +233,7 @@ defmodule MMDB2Decoder do
 
   @spec pipe_lookup!(parse_result, :inet.ip_address(), decode_options) ::
           lookup_value | no_return
-  def pipe_lookup!(parse_result, ip, options \\ [])
+  def pipe_lookup!(parse_result, ip, options \\ @default_decode_options)
 
   def pipe_lookup!({:error, error}, _, _), do: raise(error)
 

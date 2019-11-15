@@ -2,6 +2,9 @@
 
 ## v2.1.0-dev
 
+- Enhancements
+    - Lookup options can now be passed as a map instead of a keyword list
+
 - Bug fixes
     - Decoding `:pointer` with a 32 bit offset should now work as expected
 

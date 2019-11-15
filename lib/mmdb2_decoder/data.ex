@@ -26,7 +26,13 @@ defmodule MMDB2Decoder.Data do
   """
   @spec value(binary, non_neg_integer, MMDB2Decoder.decode_options()) ::
           MMDB2Decoder.lookup_value()
-  def value(data, offset, options), do: decode_value(data, offset, Map.new(options))
+  def value(data, offset, options) when is_map(options) do
+    decode_value(data, offset, options)
+  end
+
+  def value(data, offset, options) when is_list(options) do
+    decode_value(data, offset, Map.new(options))
+  end
 
   defp decode_value(data, offset, options) when byte_size(data) > offset and offset >= 0 do
     <<_::size(offset)-binary, rest::binary>> = data
