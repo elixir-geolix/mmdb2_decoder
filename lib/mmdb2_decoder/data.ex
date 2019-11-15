@@ -24,17 +24,9 @@ defmodule MMDB2Decoder.Data do
   @doc """
   Decodes the node at the given offset.
   """
-  @spec value(binary, non_neg_integer, MMDB2Decoder.decode_options()) ::
+  @spec value(binary, non_neg_integer, MMDB2Decoder.decode_options_map()) ::
           MMDB2Decoder.lookup_value()
-  def value(data, offset, options) when is_map(options) do
-    decode_value(data, offset, options)
-  end
-
-  def value(data, offset, options) when is_list(options) do
-    decode_value(data, offset, Map.new(options))
-  end
-
-  defp decode_value(data, offset, options) when byte_size(data) > offset and offset >= 0 do
+  def value(data, offset, options) when byte_size(data) > offset and offset >= 0 do
     <<_::size(offset)-binary, rest::binary>> = data
 
     {value, _rest} = decode(rest, data, options)
@@ -42,7 +34,7 @@ defmodule MMDB2Decoder.Data do
     value
   end
 
-  defp decode_value(_, _, _), do: nil
+  def value(_, _, _), do: nil
 
   defp decode(<<@binary::size(3), 0::size(5), part_rest::binary>>, _, _) do
     {"", part_rest}
@@ -229,7 +221,7 @@ defmodule MMDB2Decoder.Data do
          data_full,
          options
        ) do
-    {decode_value(data_full, offset, options), part_rest}
+    {value(data_full, offset, options), part_rest}
   end
 
   defp decode(
@@ -237,7 +229,7 @@ defmodule MMDB2Decoder.Data do
          data_full,
          options
        ) do
-    {decode_value(data_full, 2048 + offset, options), part_rest}
+    {value(data_full, 2048 + offset, options), part_rest}
   end
 
   defp decode(
@@ -245,7 +237,7 @@ defmodule MMDB2Decoder.Data do
          data_full,
          options
        ) do
-    {decode_value(data_full, 526_336 + offset, options), part_rest}
+    {value(data_full, 526_336 + offset, options), part_rest}
   end
 
   defp decode(
@@ -253,7 +245,7 @@ defmodule MMDB2Decoder.Data do
          data_full,
          options
        ) do
-    {decode_value(data_full, offset, options), part_rest}
+    {value(data_full, offset, options), part_rest}
   end
 
   defp decode(<<@unsigned_16::size(3), len::size(5), part_rest::binary>>, _, _) do

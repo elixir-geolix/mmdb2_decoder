@@ -51,13 +51,13 @@ defmodule MMDB2Decoder do
           | {:float_precision, Float.precision_range()}
           | {:map_keys, :atoms | :atoms! | :strings}
 
-  @type decode_options ::
-          %{
-            optional(:double_precision) => nil | Float.precision_range(),
-            optional(:float_precision) => nil | Float.precision_range(),
-            optional(:map_keys) => nil | :atoms | :atoms! | :strings
-          }
-          | [decode_option]
+  @type decode_options_map :: %{
+          optional(:double_precision) => nil | Float.precision_range(),
+          optional(:float_precision) => nil | Float.precision_range(),
+          optional(:map_keys) => nil | :atoms | :atoms! | :strings
+        }
+
+  @type decode_options :: decode_options_map | [decode_option]
 
   @type decoded_value :: :cache_container | :end_marker | binary | boolean | list | map | number
   @type lookup_value :: decoded_value | nil
@@ -161,8 +161,14 @@ defmodule MMDB2Decoder do
       }
   """
   @spec lookup_pointer(non_neg_integer, binary, decode_options) :: {:ok, lookup_value}
-  def lookup_pointer(pointer, data, options \\ @default_decode_options) do
+  def lookup_pointer(pointer, data, options \\ @default_decode_options)
+
+  def lookup_pointer(pointer, data, options) when is_map(options) do
     {:ok, Data.value(data, pointer, options)}
+  end
+
+  def lookup_pointer(pointer, data, options) when is_list(options) do
+    lookup_pointer(pointer, data, Map.new(options))
   end
 
   @doc """
