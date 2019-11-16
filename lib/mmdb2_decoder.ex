@@ -114,9 +114,9 @@ defmodule MMDB2Decoder do
       {
         :ok,
         %{
-          continent: %{...},
-          country: %{...},
-          registered_country: %{...}
+          "continent" => %{...},
+          "country" => %{...},
+          "registered_country" => %{...}
         }
       }
 
@@ -154,9 +154,9 @@ defmodule MMDB2Decoder do
       {
         :ok,
         %{
-          continent: %{...},
-          country: %{...},
-          registered_country: %{...}
+          "continent" => %{...},
+          "country" => %{...},
+          "registered_country" => %{...}
         }
       }
   """
