@@ -22,10 +22,10 @@ defmodule MMDB2Decoder do
 
   ## Lookup Options
 
-  The behaviour of the decoder can be adjusted by passing an option list as the
+  The behaviour of the decoder can be adjusted by passing an option map as the
   last argument to the lookup functions:
 
-      iex> MMDB2Decoder.lookup(ip, meta, tree, data, [map_keys: :atoms!])
+      iex> MMDB2Decoder.lookup(ip, meta, tree, data, %{map_keys: :atoms!})
 
   The following options are available:
 

@@ -181,11 +181,11 @@ defmodule MMDB2Decoder.DataTest do
   end
 
   test "decoded values with non-default options" do
-    options = [
+    options = %{
       double_precision: 0,
       float_precision: 0,
       map_keys: :atoms!
-    ]
+    }
 
     {:ok, decoded} =
       :fixture_decoder
@@ -207,14 +207,32 @@ defmodule MMDB2Decoder.DataTest do
     assert decoded[:utf8_string] == "unicode! ☯ - ♫"
   end
 
+  test "decoded values with map or list options are identical" do
+    options = [
+      double_precision: 6,
+      float_precision: 6,
+      map_keys: :atoms!
+    ]
+
+    {:ok, meta, tree, data} =
+      :fixture_decoder
+      |> Fixture.contents()
+      |> MMDB2Decoder.parse_database()
+
+    result_list = MMDB2Decoder.lookup({1, 1, 1, 0}, meta, tree, data, options)
+    result_map = MMDB2Decoder.lookup({1, 1, 1, 0}, meta, tree, data, Map.new(options))
+
+    assert result_list == result_map
+  end
+
   test "decode double values with unset or nil precision identical" do
     {:ok, meta, tree, data} =
       :fixture_decoder
       |> Fixture.contents()
       |> MMDB2Decoder.parse_database()
 
-    result_nil = MMDB2Decoder.lookup({1, 1, 1, 0}, meta, tree, data, double_precision: nil)
-    result_unset = MMDB2Decoder.lookup({1, 1, 1, 0}, meta, tree, data, [])
+    result_nil = MMDB2Decoder.lookup({1, 1, 1, 0}, meta, tree, data, %{double_precision: nil})
+    result_unset = MMDB2Decoder.lookup({1, 1, 1, 0}, meta, tree, data, %{})
 
     assert result_nil == result_unset
   end
@@ -225,8 +243,8 @@ defmodule MMDB2Decoder.DataTest do
       |> Fixture.contents()
       |> MMDB2Decoder.parse_database()
 
-    result_nil = MMDB2Decoder.lookup({1, 1, 1, 0}, meta, tree, data, float_precision: nil)
-    result_unset = MMDB2Decoder.lookup({1, 1, 1, 0}, meta, tree, data, [])
+    result_nil = MMDB2Decoder.lookup({1, 1, 1, 0}, meta, tree, data, %{float_precision: nil})
+    result_unset = MMDB2Decoder.lookup({1, 1, 1, 0}, meta, tree, data, %{})
 
     assert result_nil == result_unset
   end
@@ -237,8 +255,8 @@ defmodule MMDB2Decoder.DataTest do
       |> Fixture.contents()
       |> MMDB2Decoder.parse_database()
 
-    result_atoms = MMDB2Decoder.lookup({1, 1, 1, 0}, meta, tree, data, map_keys: :atoms)
-    result_atoms! = MMDB2Decoder.lookup({1, 1, 1, 0}, meta, tree, data, map_keys: :atoms!)
+    result_atoms = MMDB2Decoder.lookup({1, 1, 1, 0}, meta, tree, data, %{map_keys: :atoms})
+    result_atoms! = MMDB2Decoder.lookup({1, 1, 1, 0}, meta, tree, data, %{map_keys: :atoms!})
 
     assert result_atoms == result_atoms!
   end
@@ -249,8 +267,8 @@ defmodule MMDB2Decoder.DataTest do
       |> Fixture.contents()
       |> MMDB2Decoder.parse_database()
 
-    result_nil = MMDB2Decoder.lookup({1, 1, 1, 0}, meta, tree, data, map_keys: nil)
-    result_strings = MMDB2Decoder.lookup({1, 1, 1, 0}, meta, tree, data, map_keys: :strings)
+    result_nil = MMDB2Decoder.lookup({1, 1, 1, 0}, meta, tree, data, %{map_keys: nil})
+    result_strings = MMDB2Decoder.lookup({1, 1, 1, 0}, meta, tree, data, %{map_keys: :strings})
 
     assert result_nil == result_strings
   end

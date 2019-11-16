@@ -38,16 +38,16 @@ defmodule MMDB2Decoder.Benchmark.Parse do
           MMDB2Decoder.lookup(parse_binary_84000, meta, tree, data)
         end,
         "Parsing: Map (nested 1 level, map_keys: :atoms)" => fn ->
-          MMDB2Decoder.lookup(parse_map_1, meta, tree, data, map_keys: :atoms)
+          MMDB2Decoder.lookup(parse_map_1, meta, tree, data, %{map_keys: :atoms})
         end,
         "Parsing: Map (nested 1 level, map_keys: :strings)" => fn ->
-          MMDB2Decoder.lookup(parse_map_1, meta, tree, data, map_keys: :strings)
+          MMDB2Decoder.lookup(parse_map_1, meta, tree, data, %{map_keys: :strings})
         end,
         "Parsing: Map (nested 10 levels, map_keys: :atoms)" => fn ->
-          MMDB2Decoder.lookup(parse_map_10, meta, tree, data, map_keys: :atoms)
+          MMDB2Decoder.lookup(parse_map_10, meta, tree, data, %{map_keys: :atoms})
         end,
         "Parsing: Map (nested 10 levels, map_keys: :strings)" => fn ->
-          MMDB2Decoder.lookup(parse_map_10, meta, tree, data, map_keys: :strings)
+          MMDB2Decoder.lookup(parse_map_10, meta, tree, data, %{map_keys: :strings})
         end
       },
       formatters: [{Benchee.Formatters.Console, comparison: false}],
