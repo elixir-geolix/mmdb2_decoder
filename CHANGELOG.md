@@ -6,7 +6,7 @@
     - Lookup options can now be passed as a map instead of a keyword list
 
 - Bug fixes
-    - Decoding `:pointer` with a 32 bit offset should now work as expected
+    - Decoding `:pointer` values with a 32 bit offset should now work as expected
 
 - Soft deprecations (no warnings)
     - Using a keyword list for lookup options is discouraged in favour of passing a map that does not need to be converted internally
