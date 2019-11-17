@@ -41,4 +41,13 @@ defmodule MMDB2Decoder.ErrorTest do
              |> MMDB2Decoder.parse_database()
              |> MMDB2Decoder.pipe_lookup({1, 1, 1, 3})
   end
+
+  test "no metadata" do
+    result =
+      "broken-database-binary"
+      |> MMDB2Decoder.parse_database()
+      |> MMDB2Decoder.pipe_lookup({127, 0, 0, 1})
+
+    assert {:error, :no_metadata} == result
+  end
 end
