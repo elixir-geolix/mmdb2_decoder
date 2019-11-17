@@ -14,20 +14,6 @@ defp deps do
 end
 ```
 
-Depending on your elixir version you should also update your application list:
-
-```elixir
-def application do
-  [
-    included_applications: [
-      # ...
-      :mmdb2_decoder,
-      # ...
-    ]
-  ]
-end
-```
-
 ## Usage
 
 For more detailed examples and usage information please refer to the inline documentation of the `MMDB2Decoder` module.
