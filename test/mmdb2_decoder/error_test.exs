@@ -1,6 +1,7 @@
 defmodule MMDB2Decoder.ErrorTest do
   use ExUnit.Case, async: true
 
+  alias MMDB2Decoder.Metadata
   alias MMDB2Decoder.TestHelpers.Fixture
 
   test "error result for pipe_lookup!/2" do
@@ -49,5 +50,12 @@ defmodule MMDB2Decoder.ErrorTest do
       |> MMDB2Decoder.pipe_lookup({127, 0, 0, 1})
 
     assert {:error, :no_metadata} == result
+  end
+
+  test "tree node below count" do
+    metadata = %Metadata{ip_version: 6, node_count: 128}
+    result = MMDB2Decoder.LookupTree.locate({0, 0, 0, 0}, metadata, "")
+
+    assert {:error, :node_below_count} == result
   end
 end
