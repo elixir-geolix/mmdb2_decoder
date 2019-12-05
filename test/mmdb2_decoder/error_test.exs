@@ -4,6 +4,22 @@ defmodule MMDB2Decoder.ErrorTest do
   alias MMDB2Decoder.Metadata
   alias MMDB2Decoder.TestHelpers.Fixture
 
+  test "error result for find_pointer!/3" do
+    metadata = %Metadata{ip_version: 6, node_count: 128}
+
+    assert_raise RuntimeError, "node_below_count", fn ->
+      MMDB2Decoder.find_pointer!({0, 0, 0, 0}, metadata, "")
+    end
+  end
+
+  test "error result for lookup!/4" do
+    metadata = %Metadata{ip_version: 6, node_count: 128}
+
+    assert_raise RuntimeError, "node_below_count", fn ->
+      MMDB2Decoder.lookup!({0, 0, 0, 0}, metadata, "", "")
+    end
+  end
+
   test "error result for pipe_lookup!/2" do
     assert_raise RuntimeError, "parse error", fn ->
       MMDB2Decoder.pipe_lookup!({:error, "parse error"}, :ignored)

@@ -97,7 +97,7 @@ defmodule MMDB2Decoder do
   def find_pointer!(ip, meta, tree) do
     case find_pointer(ip, meta, tree) do
       {:ok, pointer} -> pointer
-      {:error, error} -> raise error
+      {:error, error} -> raise Kernel.to_string(error)
     end
   end
 
@@ -139,7 +139,7 @@ defmodule MMDB2Decoder do
   def lookup!(ip, meta, tree, data, options \\ @default_decode_options) do
     case lookup(ip, meta, tree, data, options) do
       {:ok, result} -> result
-      {:error, error} -> raise error
+      {:error, error} -> raise Kernel.to_string(error)
     end
   end
 
@@ -241,7 +241,7 @@ defmodule MMDB2Decoder do
           lookup_value | no_return
   def pipe_lookup!(parse_result, ip, options \\ @default_decode_options)
 
-  def pipe_lookup!({:error, error}, _, _), do: raise(error)
+  def pipe_lookup!({:error, error}, _, _), do: raise(Kernel.to_string(error))
 
   def pipe_lookup!({:ok, meta, tree, data}, ip, options),
     do: lookup!(ip, meta, tree, data, options)

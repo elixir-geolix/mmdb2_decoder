@@ -7,6 +7,7 @@
 
 - Bug fixes
     - Decoding `:pointer` values with a 32 bit offset should now work as expected
+    - Raising from `lookup!/4` et al. is now behaving as expected with a `RuntimeError`
 
 - Soft deprecations (no warnings)
     - Using a keyword list for lookup options is discouraged in favour of passing a map that does not need to be converted internally
