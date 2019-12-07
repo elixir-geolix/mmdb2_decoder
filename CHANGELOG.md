@@ -1,6 +1,6 @@
 # Changelog
 
-## v2.1.0-dev
+## v2.1.0 (2019-12-07)
 
 - Enhancements
     - Lookup options can now be passed as a map instead of a keyword list
