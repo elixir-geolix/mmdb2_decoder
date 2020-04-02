@@ -93,8 +93,12 @@ defmodule MMDB2Decoder.DataTest do
     {:ok, result_ipv4} = MMDB2Decoder.lookup({1, 1, 1, 3}, meta, tree, data)
     {:ok, result_ipv6} = MMDB2Decoder.lookup({0, 0, 0, 0, 0, 2, 0, 65}, meta, tree, data)
 
+    {:ok, result_mapped} =
+      MMDB2Decoder.lookup({0, 0, 0, 0, 0, 65_535, 257, 257}, meta, tree, data)
+
     assert result_ipv4 == %{"ip" => "::1.1.1.2"}
     assert result_ipv6 == %{"ip" => "::2:0:40"}
+    assert result_mapped == %{"ip" => "::1.1.1.1"}
   end
 
   test "ipv4+ipv6 28 bit record size" do
@@ -108,8 +112,12 @@ defmodule MMDB2Decoder.DataTest do
     {:ok, result_ipv4} = MMDB2Decoder.lookup({1, 1, 1, 3}, meta, tree, data)
     {:ok, result_ipv6} = MMDB2Decoder.lookup({0, 0, 0, 0, 0, 2, 0, 65}, meta, tree, data)
 
+    {:ok, result_mapped} =
+      MMDB2Decoder.lookup({0, 0, 0, 0, 0, 65_535, 257, 257}, meta, tree, data)
+
     assert result_ipv4 == %{"ip" => "::1.1.1.2"}
     assert result_ipv6 == %{"ip" => "::2:0:40"}
+    assert result_mapped == %{"ip" => "::1.1.1.1"}
   end
 
   test "ipv4+ipv6 32 bit record size" do
@@ -123,8 +131,12 @@ defmodule MMDB2Decoder.DataTest do
     {:ok, result_ipv4} = MMDB2Decoder.lookup({1, 1, 1, 3}, meta, tree, data)
     {:ok, result_ipv6} = MMDB2Decoder.lookup({0, 0, 0, 0, 0, 2, 0, 65}, meta, tree, data)
 
+    {:ok, result_mapped} =
+      MMDB2Decoder.lookup({0, 0, 0, 0, 0, 65_535, 257, 257}, meta, tree, data)
+
     assert result_ipv4 == %{"ip" => "::1.1.1.2"}
     assert result_ipv6 == %{"ip" => "::2:0:40"}
+    assert result_mapped == %{"ip" => "::1.1.1.1"}
   end
 
   test "ipv6-in-ipv4 24 bit record size" do

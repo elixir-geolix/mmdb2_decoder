@@ -22,7 +22,7 @@ defmodule MMDB2Decoder.LookupTree do
     do_locate(<<a::size(8), b::size(8), c::size(8), d::size(8)>>, 0, meta, tree)
   end
 
-  def locate({0, 0, 0, 0, 0, 65_535, a, b}, meta, tree) do
+  def locate({0, 0, 0, 0, 0, 65_535, a, b}, %{ip_version: 4} = meta, tree) do
     locate({a >>> 8, a &&& 0x00FF, b >>> 8, b &&& 0x00FF}, meta, tree)
   end
 
