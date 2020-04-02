@@ -7,7 +7,7 @@ defmodule MMDB2Decoder.MixProject do
     [
       app: :mmdb2_decoder,
       name: "MMDB2 Decoder",
-      version: "2.2.0-dev",
+      version: "3.0.0-dev",
       elixir: "~> 1.7",
       aliases: aliases(),
       deps: deps(),
