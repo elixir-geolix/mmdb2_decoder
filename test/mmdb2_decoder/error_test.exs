@@ -51,6 +51,16 @@ defmodule MMDB2Decoder.ErrorTest do
              |> MMDB2Decoder.parse_database()
   end
 
+  test "ipv6 lookup in ipv4 database" do
+    result =
+      :fixture_ipv4_24
+      |> Fixture.contents()
+      |> MMDB2Decoder.parse_database()
+      |> MMDB2Decoder.pipe_lookup({0, 0, 0, 0, 0, 2, 0, 65})
+
+    assert {:error, :ipv6_lookup_in_ipv4_database} == result
+  end
+
   test "no ipv4 search tree" do
     assert {:ok, nil} ==
              :fixture_no_ipv4_search_tree
