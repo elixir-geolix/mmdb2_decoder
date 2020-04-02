@@ -82,6 +82,51 @@ defmodule MMDB2Decoder.DataTest do
     assert result == %{"ip" => "::2:0:40"}
   end
 
+  test "ipv4+ipv6 24 bit record size" do
+    {:ok, meta, tree, data} =
+      :fixture_mixed_24
+      |> Fixture.contents()
+      |> MMDB2Decoder.parse_database()
+
+    assert meta.record_size == 24
+
+    {:ok, result_ipv4} = MMDB2Decoder.lookup({1, 1, 1, 3}, meta, tree, data)
+    {:ok, result_ipv6} = MMDB2Decoder.lookup({0, 0, 0, 0, 0, 2, 0, 65}, meta, tree, data)
+
+    assert result_ipv4 == %{"ip" => "::1.1.1.2"}
+    assert result_ipv6 == %{"ip" => "::2:0:40"}
+  end
+
+  test "ipv4+ipv6 28 bit record size" do
+    {:ok, meta, tree, data} =
+      :fixture_mixed_28
+      |> Fixture.contents()
+      |> MMDB2Decoder.parse_database()
+
+    assert meta.record_size == 28
+
+    {:ok, result_ipv4} = MMDB2Decoder.lookup({1, 1, 1, 3}, meta, tree, data)
+    {:ok, result_ipv6} = MMDB2Decoder.lookup({0, 0, 0, 0, 0, 2, 0, 65}, meta, tree, data)
+
+    assert result_ipv4 == %{"ip" => "::1.1.1.2"}
+    assert result_ipv6 == %{"ip" => "::2:0:40"}
+  end
+
+  test "ipv4+ipv6 32 bit record size" do
+    {:ok, meta, tree, data} =
+      :fixture_mixed_32
+      |> Fixture.contents()
+      |> MMDB2Decoder.parse_database()
+
+    assert meta.record_size == 32
+
+    {:ok, result_ipv4} = MMDB2Decoder.lookup({1, 1, 1, 3}, meta, tree, data)
+    {:ok, result_ipv6} = MMDB2Decoder.lookup({0, 0, 0, 0, 0, 2, 0, 65}, meta, tree, data)
+
+    assert result_ipv4 == %{"ip" => "::1.1.1.2"}
+    assert result_ipv6 == %{"ip" => "::2:0:40"}
+  end
+
   test "ipv6-in-ipv4 24 bit record size" do
     {:ok, meta, tree, data} =
       :fixture_ipv4_24
