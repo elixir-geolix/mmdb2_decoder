@@ -3,6 +3,7 @@
 ## v3.0.0-dev
 
 - Backwards incompatible changes
+    - Lookup options are now only accepted in map format
     - Trying to lookup an IPv6 address in an IPv4-only database will now return an `{:error, :ipv6_lookup_in_ipv4_database}` tuple instead of a `nil` (not found) result. If the IP address is in the IPv6-to-IPv4-Mapping range (`::ffff:0:0/96`) the lookup will still be done using the mapped IPv4 address
 
 ## v2.1.0 (2019-12-07)
