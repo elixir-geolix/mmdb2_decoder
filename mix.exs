@@ -43,7 +43,7 @@ defmodule MMDB2Decoder.MixProject do
       {:dialyxir, "~> 1.0", only: :dev, runtime: false},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
       {:excoveralls, "~> 0.12", only: :test, runtime: false},
-      {:geolix_testdata, "~> 0.4.0", only: [:bench, :test], runtime: false}
+      {:geolix_testdata, "~> 0.5.0", only: [:bench, :test], runtime: false}
     ]
   end
 
