@@ -8,6 +8,7 @@ defmodule MMDB2Decoder.Benchmark.Lookup do
 
     {:ok, lookup_ipv4} = :inet.parse_address('1.1.1.1')
     {:ok, lookup_ipv4_in_ipv6} = :inet.parse_address('::1.1.1.1')
+    {:ok, lookup_ipv6} = :inet.parse_address('2001:db8::0101:0101')
 
     Benchee.run(
       %{
@@ -16,6 +17,9 @@ defmodule MMDB2Decoder.Benchmark.Lookup do
         end,
         "Lookup: IPv4 in IPv6" => fn ->
           MMDB2Decoder.lookup(lookup_ipv4_in_ipv6, meta, tree, data)
+        end,
+        "Lookup: IPv6" => fn ->
+          MMDB2Decoder.lookup(lookup_ipv6, meta, tree, data)
         end
       },
       formatters: [{Benchee.Formatters.Console, comparison: false}],
