@@ -27,7 +27,7 @@
 - Backwards incompatible changes
     - Database entries of the type `data cache container` now return `:cache_container` (was `:cache`)
     - Database entries of the type `end marker` now return `:end_marker` (was `:end`)
-    - Minimum required elixir version is now `~> 1.7`
+    - Minimum required Elixir version is now `~> 1.7`
     - New decoding defaults are now active:
         - `double_prevision: nil`
         - `float_precision: nil`
@@ -67,7 +67,7 @@
     - All public lookup functions are now always returning either `{:ok, term}` or `{:error, term}`. Both `lookup!/4` and `pipe_lookup!/2` are available to get only the lookup result or raise in case of an error
 
 - Backwards incompatible changes
-    - Minimum required elixir version is now `~> 1.5`
+    - Minimum required Elixir version is now `~> 1.5`
 
 ## v0.4.0 (2018-12-21)
 
