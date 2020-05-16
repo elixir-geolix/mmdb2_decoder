@@ -13,7 +13,7 @@ defmodule MMDB2Decoder do
   Using the returned database contents you can start looking up
   individual entries:
 
-      iex(3)> {:ok, ip} = :inet.parse(String.to_charlist("127.0.0.1"))
+      iex(3)> {:ok, ip} = :inet.parse_address(String.to_charlist("127.0.0.1"))
       iex(4)> MMDB2Decoder.lookup(ip, meta, tree, data)
       {:ok, %{...}}
 
@@ -99,7 +99,7 @@ defmodule MMDB2Decoder do
 
   This is probably the main function you will use. The `ip` address is expected
   to be a 4- or 8-element tuple describing an IPv4 or IPv6 address. To obtain
-  this tuple from a string you can use `:inet.ip_address/1`.
+  this tuple from a string you can use `:inet.parse_address/1`.
 
   ## Usage
 
