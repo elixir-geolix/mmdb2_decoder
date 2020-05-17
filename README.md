@@ -8,7 +8,7 @@ Add the module as a dependency to your `mix.exs` file:
 defp deps do
   [
     # ...
-    {:mmdb2_decoder, "~> 2.0"},
+    {:mmdb2_decoder, "~> 3.0"},
     # ...
   ]
 end

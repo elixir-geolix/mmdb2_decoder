@@ -1,6 +1,6 @@
 # Changelog
 
-## v3.0.0-dev
+## v3.0.0 (2020-05-17)
 
 - Backwards incompatible changes
     - Lookup options are now only accepted in map format
