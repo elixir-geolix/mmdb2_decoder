@@ -299,17 +299,15 @@ defmodule MMDB2Decoder.Data do
 
   defp maybe_convert_map_key(value, %{map_keys: :atoms}), do: String.to_atom(value)
   defp maybe_convert_map_key(value, %{map_keys: :atoms!}), do: String.to_existing_atom(value)
-  defp maybe_convert_map_key(value, %{map_keys: :strings}), do: value
   defp maybe_convert_map_key(value, _), do: value
 
-  defp maybe_round_double(value, %{double_precision: nil}), do: value
-
-  defp maybe_round_double(value, %{double_precision: precision}),
+  defp maybe_round_double(value, %{double_precision: precision}) when is_integer(precision),
     do: Float.round(value, precision)
 
   defp maybe_round_double(value, _), do: value
 
-  defp maybe_round_float(value, %{float_precision: nil}), do: value
-  defp maybe_round_float(value, %{float_precision: precision}), do: Float.round(value, precision)
+  defp maybe_round_float(value, %{float_precision: precision}) when is_integer(precision),
+    do: Float.round(value, precision)
+
   defp maybe_round_float(value, _), do: value
 end
