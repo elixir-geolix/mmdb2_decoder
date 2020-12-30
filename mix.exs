@@ -21,8 +21,7 @@ defmodule MMDB2Decoder.MixProject do
         "bench.lookup": :bench,
         "bench.parse": :bench,
         coveralls: :test,
-        "coveralls.detail": :test,
-        "coveralls.travis": :test
+        "coveralls.detail": :test
       ],
       test_coverage: [tool: ExCoveralls]
     ]
@@ -54,7 +53,9 @@ defmodule MMDB2Decoder.MixProject do
         :race_conditions,
         :underspecs,
         :unmatched_returns
-      ]
+      ],
+      plt_core_path: "plts",
+      plt_file: {:no_warn, "plts/dialyzer.plt"}
     ]
   end
 
