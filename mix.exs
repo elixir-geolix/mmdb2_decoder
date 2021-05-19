@@ -2,16 +2,16 @@ defmodule MMDB2Decoder.MixProject do
   use Mix.Project
 
   @url_github "https://github.com/elixir-geolix/mmdb2_decoder"
+  @version "3.1.0-dev"
 
   def project do
     [
       app: :mmdb2_decoder,
       name: "MMDB2 Decoder",
-      version: "3.1.0-dev",
+      version: @version,
       elixir: "~> 1.7",
       aliases: aliases(),
       deps: deps(),
-      description: "MMDB2 File Format Decoder",
       dialyzer: dialyzer(),
       docs: docs(),
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -61,9 +61,15 @@ defmodule MMDB2Decoder.MixProject do
 
   defp docs do
     [
-      main: "MMDB2Decoder",
+      extras: [
+        "CHANGELOG.md",
+        "LICENSE": [title: "License"],
+        "README.md": [title: "Overview"]
+      ],
+      main: "readme",
       source_ref: "master",
-      source_url: @url_github
+      source_url: @url_github,
+      formatters: ["html"]
     ]
   end
 
@@ -71,10 +77,14 @@ defmodule MMDB2Decoder.MixProject do
   defp elixirc_paths(_), do: ["lib"]
 
   defp package do
-    %{
+    [
+      description: "MMDB2 File Format Decoder",
       files: ["CHANGELOG.md", "LICENSE", "mix.exs", "README.md", "lib"],
-      licenses: ["Apache 2.0"],
-      links: %{"GitHub" => @url_github}
-    }
+      licenses: ["Apache-2.0"],
+      links: %{
+        "Changelog" => "https://hexdocs.pm/mmdb2_decoder/changelog.html",
+        "GitHub" => @url_github
+      }
+    ]
   end
 end

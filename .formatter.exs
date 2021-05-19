@@ -1,6 +1,7 @@
+# Used by "mix format"
 [
   inputs: [
-    "{bench,lib,test}/**/*.{ex,exs}",
+    "{bench,config,lib,test}/**/*.{ex,exs}",
     "{.credo,.formatter,mix}.exs"
   ]
 ]
