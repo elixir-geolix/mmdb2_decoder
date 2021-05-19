@@ -1,5 +1,12 @@
 # MMDB2 File Format Decoder
 
+[![Test](https://github.com/elixir-geolix/mmdb2_decoder/actions/workflows/test.yml/badge.svg)](https://github.com/elixir-geolix/mmdb2_decoder/actions/workflows/test.yml)
+[![Module Version](https://img.shields.io/hexpm/v/mmdb2_decoder.svg)](https://hex.pm/packages/mmdb2_decoder)
+[![Hex Docs](https://img.shields.io/badge/hex-docs-lightgreen.svg)](https://hexdocs.pm/mmdb2_decoder/)
+[![Total Downloads](https://img.shields.io/hexpm/dt/mmdb2_decoder.svg)](https://hex.pm/packages/mmdb2_decoder)
+[![License](https://img.shields.io/hexpm/l/mmdb2_decoder.svg)](https://github.com/elixir-geolix/mmdb2_decoder/blob/master/LICENSE)
+[![Last Updated](https://img.shields.io/github/last-commit/elixir-geolix/mmdb2_decoder.svg)](https://github.com/elixir-geolix/mmdb2_decoder/commits/master)
+
 ## Setup
 
 Add the module as a dependency to your `mix.exs` file:
@@ -40,9 +47,17 @@ MMDB2Decoder.lookup(ip, meta, tree, data)
 
 ## Benchmark
 
-Several (minimal) benchmark scripts are included. Please refer to the Mixfile or `mix help` output for their names.
+Several (minimal) benchmark scripts are included as shown below:
 
-## License
+```bash
+$ mix bench.database
+$ mix bench.lookup
+$ mix bench.parse
+```
+
+## Copyright and License
+
+Copyright (c) 2017 Marc Neudert
 
 [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
 
