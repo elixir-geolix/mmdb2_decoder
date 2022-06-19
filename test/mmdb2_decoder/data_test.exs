@@ -1,6 +1,7 @@
 defmodule MMDB2Decoder.DataTest do
   use ExUnit.Case, async: true
-  use Bitwise
+
+  import Bitwise
 
   alias MMDB2Decoder.TestHelpers.Fixture
 

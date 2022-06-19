@@ -1,5 +1,10 @@
 # Changelog
 
+## v3.0.1-dev
+
+- Enhancements
+    - Usage of to-be-deprecated `use Bitwise` has been replaced with `import Bitwise` to prepare for Elixir 1.14.x
+
 ## v3.0.0 (2020-05-17)
 
 - Backwards incompatible changes

@@ -1,7 +1,7 @@
 defmodule MMDB2Decoder.LookupTree do
   @moduledoc false
 
-  use Bitwise, only_operators: true
+  import Bitwise
 
   alias MMDB2Decoder.Metadata
 
