@@ -11,7 +11,7 @@ jobs:
 
     - name: setup
       id: setup
-      uses: erlef/setup-elixir@v1
+      uses: erlef/setup-beam@v1
       with:
         elixir-version: '1.13.4'
         otp-version: '25.0'
