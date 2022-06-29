@@ -70,7 +70,6 @@ defmodule MMDB2Decoder.MixProject do
       main: "MMDB2Decoder",
       source_ref: "master",
       source_url: @url_github,
-      api_reference: false,
       formatters: ["html"]
     ]
   end
