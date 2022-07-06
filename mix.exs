@@ -68,7 +68,7 @@ defmodule MMDB2Decoder.MixProject do
         "README.md": [title: "Overview"]
       ],
       main: "MMDB2Decoder",
-      source_ref: "master",
+      source_ref: "v#{@version}",
       source_url: @url_github,
       formatters: ["html"]
     ]
