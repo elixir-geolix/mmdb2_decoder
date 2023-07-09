@@ -4,9 +4,9 @@
   |> File.read!()
   |> MMDB2Decoder.parse_database()
 
-{:ok, lookup_ipv4} = :inet.parse_address('1.1.1.1')
-{:ok, lookup_ipv4_in_ipv6} = :inet.parse_address('::1.1.1.1')
-{:ok, lookup_ipv6} = :inet.parse_address('2001:db8::0101:0101')
+{:ok, lookup_ipv4} = :inet.parse_address(~c"1.1.1.1")
+{:ok, lookup_ipv4_in_ipv6} = :inet.parse_address(~c"::1.1.1.1")
+{:ok, lookup_ipv6} = :inet.parse_address(~c"2001:db8::0101:0101")
 
 Benchee.run(
   %{

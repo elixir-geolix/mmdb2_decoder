@@ -4,16 +4,16 @@
   |> File.read!()
   |> MMDB2Decoder.parse_database()
 
-{:ok, parse_array_1} = :inet.parse_address('2.0.4.1')
-{:ok, parse_array_10} = :inet.parse_address('2.0.4.10')
+{:ok, parse_array_1} = :inet.parse_address(~c"2.0.4.1")
+{:ok, parse_array_10} = :inet.parse_address(~c"2.0.4.10")
 
-{:ok, parse_map_1} = :inet.parse_address('2.7.0.1')
-{:ok, parse_map_10} = :inet.parse_address('2.7.0.10')
+{:ok, parse_map_1} = :inet.parse_address(~c"2.7.0.1")
+{:ok, parse_map_10} = :inet.parse_address(~c"2.7.0.10")
 
-{:ok, parse_binary_1} = :inet.parse_address('2.2.0.1')
-{:ok, parse_binary_42} = :inet.parse_address('2.2.0.2')
-{:ok, parse_binary_420} = :inet.parse_address('2.2.0.3')
-{:ok, parse_binary_84000} = :inet.parse_address('2.2.0.4')
+{:ok, parse_binary_1} = :inet.parse_address(~c"2.2.0.1")
+{:ok, parse_binary_42} = :inet.parse_address(~c"2.2.0.2")
+{:ok, parse_binary_420} = :inet.parse_address(~c"2.2.0.3")
+{:ok, parse_binary_84000} = :inet.parse_address(~c"2.2.0.4")
 
 Benchee.run(
   %{
