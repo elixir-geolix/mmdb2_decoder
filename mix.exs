@@ -3,7 +3,7 @@ defmodule MMDB2Decoder.MixProject do
 
   @url_github "https://github.com/elixir-geolix/mmdb2_decoder"
   @url_changelog "https://hexdocs.pm/mmdb2_decoder/changelog.html"
-  @version "3.1.0-dev"
+  @version "4.0.0-dev"
 
   def project do
     [
