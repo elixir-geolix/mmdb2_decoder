@@ -11,7 +11,7 @@ defmodule MMDB2Decoder.MixProject do
       name: "MMDB2 Decoder",
       description: "MMDB2 File Format Decoder",
       version: @version,
-      elixir: "~> 1.7",
+      elixir: "~> 1.17",
       aliases: aliases(),
       deps: deps(),
       dialyzer: dialyzer(),
