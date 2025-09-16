@@ -18,7 +18,9 @@ jobs:
     runs-on: ubuntu-24.04
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
 
       - name: setup
         id: setup
@@ -28,7 +30,7 @@ jobs:
           otp-version: '28.0'
 
       - name: mix-cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         id: mix-cache
         with:
           path: deps
@@ -43,7 +45,7 @@ jobs:
           mix deps.get
 
       - name: plt-cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         id: plt-cache
         with:
           path: plts
@@ -62,7 +64,9 @@ jobs:
     runs-on: ubuntu-24.04
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
 
       - run: yamllint .
         working-directory: .github
@@ -71,7 +75,9 @@ jobs:
     runs-on: ubuntu-24.04
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
 
       - name: setup
         id: setup
@@ -81,7 +87,7 @@ jobs:
           otp-version: '28.0'
 
       - name: mix-cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         id: mix-cache
         with:
           path: deps
@@ -117,7 +123,9 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
 
       - name: setup
         uses: erlef/setup-beam@v1
@@ -126,7 +134,7 @@ jobs:
           otp-version: ${{ matrix.otp }}
 
       - name: mix-cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         id: mix-cache
         with:
           path: deps
