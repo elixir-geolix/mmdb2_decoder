@@ -27,7 +27,7 @@ defmodule MMDB2Decoder.Data do
   @spec value(binary, non_neg_integer, MMDB2Decoder.decode_options()) ::
           MMDB2Decoder.lookup_value()
   def value(data, offset, options) when byte_size(data) > offset and offset >= 0 do
-    <<_::size(offset)-binary, rest::binary>> = data
+    <<_::size(^offset)-binary, rest::binary>> = data
 
     {value, _rest} = decode(rest, data, options)
 
@@ -267,7 +267,7 @@ defmodule MMDB2Decoder.Data do
   end
 
   defp decode_binary(data_part, len) do
-    <<value::size(len)-binary, rest::binary>> = data_part
+    <<value::size(^len)-binary, rest::binary>> = data_part
 
     {value, rest}
   end
@@ -286,13 +286,13 @@ defmodule MMDB2Decoder.Data do
   end
 
   defp decode_signed(data_part, bitlen) do
-    <<value::size(bitlen)-integer-signed, rest::binary>> = data_part
+    <<value::size(^bitlen)-integer-signed, rest::binary>> = data_part
 
     {value, rest}
   end
 
   defp decode_unsigned(data_part, bitlen) do
-    <<value::size(bitlen)-integer-unsigned, rest::binary>> = data_part
+    <<value::size(^bitlen)-integer-unsigned, rest::binary>> = data_part
 
     {value, rest}
   end

@@ -50,7 +50,7 @@ defmodule MMDB2Decoder.Database do
       meta = %{meta | node_byte_size: node_byte_size}
       meta = %{meta | tree_size: tree_size}
 
-      <<tree_part::size(tree_size)-binary, _::size(16)-binary, data_part::binary>> = data
+      <<tree_part::size(^tree_size)-binary, _::size(16)-binary, data_part::binary>> = data
 
       {:ok, meta, tree_part, data_part}
     else
